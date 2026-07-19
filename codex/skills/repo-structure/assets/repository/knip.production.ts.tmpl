@@ -1,0 +1,17 @@
+import type { KnipConfig } from "knip";
+export default {
+  workspaces: {
+    ".": {
+      entry: ["vitest.tools.config.ts"],
+      ignore: ["knip.ts", "tools/**"],
+    },
+    "apps/*": {
+      entry: ["src/routeTree.gen.ts", "src/lib/runtime.client.ts"],
+      ignoreIssues: {
+        "src/routes/**/*.{ts,tsx}": ["exports"],
+        "src/lib/runtime.{client,server}.ts": ["exports"],
+      },
+    },
+    "packages/*": { entry: ["src/index.ts", "src/server.ts", "src/live.layer.ts"] },
+  },
+} satisfies KnipConfig;

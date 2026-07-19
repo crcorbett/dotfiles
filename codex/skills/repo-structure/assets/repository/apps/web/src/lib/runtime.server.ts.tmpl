@@ -1,0 +1,21 @@
+import "@tanstack/react-start/server-only";
+import { DomainLive } from "__SCOPE__/domain/live";
+import { makeHttpApiInProcessClient } from "__SCOPE__/http-api/client/in-process";
+import { HttpApiRoutes } from "__SCOPE__/http-api/server";
+import { RpcHttpLayer } from "__SCOPE__/rpc/server";
+import { Layer, ManagedRuntime } from "effect";
+import { HttpRouter } from "effect/unstable/http";
+
+export const rpcWebHandler = HttpRouter.toWebHandler(RpcHttpLayer.pipe(Layer.provide(DomainLive)), {
+  disableLogger: true,
+});
+export const httpApiWebHandler = HttpRouter.toWebHandler(
+  HttpApiRoutes.pipe(Layer.provide(DomainLive)),
+  { disableLogger: true },
+);
+
+const ServerLive = makeHttpApiInProcessClient(httpApiWebHandler.handler).pipe(
+  Layer.provideMerge(DomainLive),
+);
+export const serverRuntime = ManagedRuntime.make(ServerLive);
+export const disposeServerRuntime = () => serverRuntime.dispose();

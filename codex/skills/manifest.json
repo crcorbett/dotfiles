@@ -1,0 +1,40 @@
+{
+  "$schema": "./manifest.schema.json",
+  "schemaVersion": 1,
+  "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
+  "sourcePath": "codex/skills",
+  "installedProjection": "~/.codex/skills",
+  "projectionDigest": "469f303adfd8657c777d7f1e7176b793a025600a184fda04913c253c9d07db36",
+  "skills": [
+    {
+      "name": "effect-client-wrapper",
+      "fileCount": 2,
+      "treeDigest": "deaad5d39c065fbeeec277fe60b3a79177274253ea580d5d360f340a442692f3"
+    },
+    {
+      "name": "package-structure",
+      "fileCount": 52,
+      "treeDigest": "e9bd39ccc9b9f781ede1442f09ff679fdea6a76f23c3b153433f9867e4a36604"
+    },
+    {
+      "name": "prd-implementer",
+      "fileCount": 2,
+      "treeDigest": "7d22b720aece70c100dc71da2f3d6f2fda647e0f0ada1247e84dd4aa004d69e0"
+    },
+    {
+      "name": "prd-review",
+      "fileCount": 2,
+      "treeDigest": "1829975c8887353a661d24a05d0d4a493a4953e61a7ea75000ef7d847c736825"
+    },
+    {
+      "name": "prd-writer",
+      "fileCount": 2,
+      "treeDigest": "efe05c8005b1b92d8c6137a435bd146c667deba6445750a58e0c93e51ec7861a"
+    },
+    {
+      "name": "repo-structure",
+      "fileCount": 64,
+      "treeDigest": "02bc7322b28441570af4b9d59e7f68086987311dc53c8ce4a708d9b12d78c1e4"
+    }
+  ]
+}

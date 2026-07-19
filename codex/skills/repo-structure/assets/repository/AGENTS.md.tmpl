@@ -1,0 +1,9 @@
+# Repository instructions
+
+Read every relevant `docs/**` and `README*` before implementation. Use
+repository-local skills under `.agents/skills`; the local package skill routes
+to the global canonical package contract. Keep Effects lazy, flat, sequential,
+and app-executed. Decode at ingress and encode at outward boundaries. Avoid
+generic client callbacks, raw identifiers, primitive semantic config, unchecked
+output, runtime type-class branching, pass-through helpers, giant routes, and
+service-aware presentation leaves. Run `bun run verification` before handoff.

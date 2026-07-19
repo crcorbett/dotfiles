@@ -96,8 +96,12 @@ dotenv/
 │       └── settings.json
 │
 ├── scripts/
+│   ├── project-codex-skills.py # Validate/install/roll back shared Codex skills
 │   ├── setup-tailscale.sh    # Tailscale install + auth
 │   └── exit_node_setup.sh    # Configure VM as exit node
+│
+├── codex/
+│   └── skills/               # Canonical shared engineering skills + manifest
 │
 ├── APPS.md                   # Manual app installation list
 ├── SSH_SETUP.md              # 1Password SSH setup guide
@@ -106,6 +110,28 @@ dotenv/
 ```
 
 ## What's Included
+
+### Shared Codex skills
+
+`codex/skills/` is the version-controlled semantic source for the shared
+engineering skills listed in its manifest. `~/.codex/skills` is an installed
+projection, not an editing surface. The projection command validates source
+digests, stages copies, preserves a last-known-good backup, replaces only the
+manifest-named skills, and reads the result back:
+
+```bash
+python3 scripts/project-codex-skills.py --check
+python3 scripts/project-codex-skills.py --install
+```
+
+Use the backup ID from an installation receipt to recover:
+
+```bash
+python3 scripts/project-codex-skills.py --rollback BACKUP_ID
+```
+
+Commit and review source changes before installation. The script never pushes,
+publishes, or changes skills omitted from the manifest.
 
 ### Both Platforms (core.nix)
 

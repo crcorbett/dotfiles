@@ -1,0 +1,8 @@
+import { DomainItem } from "__SCOPE__/domain/schemas";
+import { createSerializableLoader } from "__SCOPE__/effect-start/loader";
+import { Schema } from "effect";
+
+export const domainListLoader = createSerializableLoader({
+  error: Schema.Never,
+  success: Schema.Array(DomainItem),
+});

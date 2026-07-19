@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crcorbett.dev/schemas/codex-skill-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceRepository", "sourcePath", "installedProjection", "projectionDigest", "skills"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "sourceRepository": { "type": "string", "format": "uri" },
+    "sourcePath": { "const": "codex/skills" },
+    "installedProjection": { "const": "~/.codex/skills" },
+    "projectionDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "fileCount", "treeDigest"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "fileCount": { "type": "integer", "minimum": 1 },
+          "treeDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    }
+  }
+}

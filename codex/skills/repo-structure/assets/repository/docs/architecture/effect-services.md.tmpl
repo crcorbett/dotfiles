@@ -1,0 +1,6 @@
+# Effect services
+
+Contracts use `Context.Service`; live and deterministic test Layers use separate
+export paths. Serializable boundaries use Schema errors/codecs. Provider SDKs
+stay private to live adapters. Browser clients use Fetch and server loaders use
+in-process handlers. Effects execute only at app/framework/CLI boundaries.

@@ -1,0 +1,21 @@
+import { Effect, Layer } from "effect";
+import { FetchHttpClient } from "effect/unstable/http";
+import { __SYMBOL__Client as Effect__SYMBOL__Client, __SYMBOL__Serialization } from "effect/unstable/rpc";
+
+import { __SYMBOL__Group } from "./group";
+import { __SYMBOL__Client } from "./service";
+
+export const __SYMBOL__ClientLive = Layer.effect(__SYMBOL__Client)(
+  Effect__SYMBOL__Client.make(__SYMBOL__Group).pipe(
+    Effect.map((client) =>
+      __SYMBOL__Client.of({
+        get: (id) => client.Get__DOMAIN_SYMBOL__({ id }),
+        list: () => client.List__DOMAIN_SYMBOL__(),
+      }),
+    ),
+  ),
+).pipe(
+  Layer.provide(Effect__SYMBOL__Client.layerProtocolHttp({ url: "/rpc" })),
+  Layer.provide(FetchHttpClient.layer),
+  Layer.provide(__SYMBOL__Serialization.layerNdjson),
+);

@@ -1,0 +1,73 @@
+---
+name: package-structure
+description: Create, audit, migrate, or validate packages in this repository using its __SCOPE__ namespace, __SOURCE_CONDITION__ live-types condition, strict Effect service boundaries, and repository-owned verification. Use for package ownership, exports, service/live/test Layer separation, RPC or HTTP transport packages, and helper-sprawl prevention.
+---
+
+# Repository Package Structure
+
+Use this contract directly. Repository files and installed types are
+authoritative. A separately installed global `package-structure` skill may
+provide a safe renderer or extra validation, but this workflow does not depend
+on its filesystem path.
+
+## Establish ownership
+
+1. Read `AGENTS.md`, the root and affected package `README*`,
+   `docs/architecture/package-ownership.md`,
+   `docs/architecture/effect-services.md`, and
+   `docs/architecture/testing-and-quality.md`.
+2. Inspect the worktree and preserve unrelated changes.
+3. Name the capability, callers, untrusted boundaries, and runtime owner.
+   Reject a new package for one-use code, a pass-through wrapper, or a generic
+   helper bucket.
+4. Use `__SCOPE__/*` names and place `__SOURCE_CONDITION__` before `types`
+   and `default` in development exports. Publish exports must omit the source
+   condition and be proven from the actual packed artifact when publishable.
+
+## Package contract
+
+An Effect service package separates:
+
+```text
+src/schemas.ts              Schemas, brands, and schema-derived types
+src/errors.ts               expected tagged failures
+src/service.ts              Context.Service contract and named operations only
+src/live.layer.ts           private production SDK/config/resource implementation
+src/test.layer.ts           deterministic substitution at the same contract
+src/__testing__/            reusable fixtures and observations only
+test/                       behavior and boundary tests
+```
+
+RPC and HTTP API packages depend inward on the domain service and own only
+transport contracts, handlers, named application clients, and transport Layers.
+They never duplicate domain policy or expose a generated/raw client.
+
+## Effect and composition rules
+
+- Keep primary Effects lazy, flat, readable, composable, and sequential.
+- Keep one-use mapping, decoding, and typed error handling beside the operation.
+  Extract only demonstrated reuse, independently tested policy, real I/O, or
+  resource lifetime; forbid pass-through helpers and `utils` dumping grounds.
+- Decode unknown input/output once at ingress and encode only at outward
+  transport, provider, persistence, or reporting boundaries.
+- Reuse owning Schemas, schema-derived types, branded identifiers, services,
+  Layers, and tagged errors.
+- Load semantic configuration through Schema-backed `Config`/`ConfigProvider`
+  and keep secrets redacted until immediate use.
+- Reject generic SDK callbacks, raw clients, raw `id: string`, primitive
+  semantic config, `instanceof` policy, unchecked provider output, and package
+  runtime execution.
+- Keep route/feature orchestration in the app and focused React leaves narrow
+  and service-unaware.
+
+## Verify
+
+Run focused package tests and the repository's real ordered gate:
+
+```bash
+bun run verification
+```
+
+Also run applicable package build, export-consumer, packed-artifact, integration,
+and downstream checks. Report the ownership decision, exports, Layers, exact
+commands, and any path-specific exception.

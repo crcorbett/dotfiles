@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Structure"
+  short_description: "Build strict Bun, TanStack, and Effect repositories"
+  default_prompt: "Use $repo-structure to scaffold or audit a Bun, Turbo, TanStack Start, and Effect repository with executable validation."

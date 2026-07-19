@@ -1,0 +1,6 @@
+# Testing and quality
+
+Run: `bun run format:check`, `bun run lint`, `bun run test:lint-rules`,
+`bun run check-types`, `bun run test`, then `bun run build`. Domain tests use
+deterministic observable Layers. RPC/HTTP transport tests prove serialization.
+Export consumers prove source, declaration, default, and publish resolution.

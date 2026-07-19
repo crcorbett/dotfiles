@@ -1,0 +1,31 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && tsc --noEmit",
+    "check-types": "vite build && tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "__SCOPE__/domain": "workspace:*",
+    "__SCOPE__/effect-start": "workspace:*",
+    "__SCOPE__/http-api": "workspace:*",
+    "__SCOPE__/rpc": "workspace:*",
+    "@tanstack/react-router": "catalog:tanstack",
+    "@tanstack/react-start": "catalog:tanstack",
+    "effect": "catalog:effect",
+    "react": "catalog:react",
+    "react-dom": "catalog:react"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:react",
+    "@types/react-dom": "catalog:react",
+    "@vitejs/plugin-react": "catalog:build",
+    "typescript": "catalog:typescript",
+    "vite": "catalog:build",
+    "vitest": "catalog:testing"
+  }
+}

@@ -1,0 +1,12 @@
+import type { __DOMAIN_SYMBOL__NotFoundError } from "__DOMAIN_PACKAGE__/errors";
+import type { __DOMAIN_SYMBOL__Id, __DOMAIN_SYMBOL__Item } from "__DOMAIN_PACKAGE__/schemas";
+import { Context } from "effect";
+import type { Effect } from "effect";
+import type { __SYMBOL__ClientError } from "effect/unstable/rpc/__SYMBOL__ClientError";
+
+export interface I__SYMBOL__Client {
+  readonly get: (id: __DOMAIN_SYMBOL__Id) => Effect.Effect<__DOMAIN_SYMBOL__Item, __DOMAIN_SYMBOL__NotFoundError | __SYMBOL__ClientError>;
+  readonly list: () => Effect.Effect<readonly __DOMAIN_SYMBOL__Item[], __SYMBOL__ClientError>;
+}
+
+export class __SYMBOL__Client extends Context.Service<__SYMBOL__Client, I__SYMBOL__Client>()("__PACKAGE_NAME__/Client") {}

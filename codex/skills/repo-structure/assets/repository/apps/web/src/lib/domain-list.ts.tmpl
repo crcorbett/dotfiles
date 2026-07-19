@@ -1,0 +1,15 @@
+import { DomainService } from "__SCOPE__/domain/service";
+import { createServerFn } from "@tanstack/react-start";
+import { Effect } from "effect";
+
+import { domainListLoader } from "./loader";
+
+export const loadDomainItems = createServerFn({ method: "GET" }).handler(async () => {
+  const { serverRuntime } = await import("./runtime.server");
+  return serverRuntime.runPromise(
+    Effect.gen(function* () {
+      const domain = yield* DomainService;
+      return yield* domain.list();
+    }).pipe(domainListLoader.encodeExit),
+  );
+});

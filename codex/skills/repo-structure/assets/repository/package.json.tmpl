@@ -1,0 +1,66 @@
+{
+  "name": "__REPO_NAME__",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalogs": {
+      "effect": {
+        "effect": "__VERSION_EFFECT__",
+        "@effect/vitest": "__VERSION_EFFECT__"
+      },
+      "tanstack": {
+        "@tanstack/react-start": "__VERSION_TANSTACK_REACT_START__",
+        "@tanstack/react-router": "__VERSION_TANSTACK_REACT_ROUTER__"
+      },
+      "react": {
+        "react": "__VERSION_REACT__",
+        "react-dom": "__VERSION_REACT__",
+        "@types/react": "__VERSION_TYPES_REACT__",
+        "@types/react-dom": "__VERSION_TYPES_REACT_DOM__"
+      },
+      "typescript": {
+        "typescript": "__VERSION_TYPESCRIPT__"
+      },
+      "testing": {
+        "vitest": "__VERSION_VITEST__"
+      },
+      "build": {
+        "vite": "__VERSION_VITE__",
+        "@vitejs/plugin-react": "__VERSION_VITEJS_PLUGIN_REACT__"
+      }
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "format:check": "oxfmt --check .",
+    "format": "oxfmt .",
+    "lint": "oxlint .",
+    "test:lint-rules": "bun test tools/oxlint/policy.test.ts",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "build": "turbo run build",
+    "knip": "knip",
+    "knip:production": "knip --production --config knip.production.ts --strict",
+    "changeset": "changeset",
+    "changeset:status": "changeset status",
+    "verification": "bun run format:check && bun run lint && bun run test:lint-rules && bun run check-types && bun run knip && bun run knip:production && bun run test && bun run build"
+  },
+  "devDependencies": {
+    "@changesets/cli": "__VERSION_CHANGESETS_CLI__",
+    "@types/bun": "__VERSION_TYPES_BUN__",
+    "knip": "__VERSION_KNIP__",
+    "oxfmt": "__VERSION_OXFMT__",
+    "oxlint": "__VERSION_OXLINT__",
+    "turbo": "__VERSION_TURBO__",
+    "typescript": "catalog:typescript",
+    "vitest": "catalog:testing"
+  },
+  "engines": {
+    "bun": ">=__VERSION_BUN__"
+  },
+  "packageManager": "bun@__VERSION_BUN__"
+}
