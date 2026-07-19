@@ -58,6 +58,9 @@ required = [
     "docs/architecture/package-ownership.md", "docs/architecture/frontend-composition.md",
     "docs/architecture/testing-and-quality.md", "tools/oxlint/policy.test.ts",
     ".agents/skills/package-structure/SKILL.md",
+    ".agents/skills/docs-maintainer/SKILL.md",
+    ".agents/skills/docs-maintainer/agents/openai.yaml",
+    ".agents/skills/docs-maintainer/references/repository-profile.md",
 ]
 missing = [path for path in required if not (root / path).is_file()]
 if missing:
@@ -70,10 +73,29 @@ for workflow in (root / ".github/workflows").glob("*.yml"):
     for line in workflow.read_text().splitlines():
         if "uses:" in line and not re.search(r"@[0-9a-f]{40}(?:\s|#|$)", line):
             raise SystemExit(f"mutable action in {workflow.relative_to(root)}: {line.strip()}")
-for skill in ("package-structure", "prd-writer", "prd-review", "prd-implementer", "effect-client-wrapper"):
+for skill in ("docs-maintainer", "package-structure", "prd-writer", "prd-review", "prd-implementer", "effect-client-wrapper"):
     skill_root = root / ".agents/skills" / skill
     if not (skill_root / "SKILL.md").is_file() or not (skill_root / "agents/openai.yaml").is_file():
         raise SystemExit(f"incomplete local skill: {skill}")
+skill_link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+for markdown in (root / ".agents/skills").rglob("*.md"):
+    for raw in skill_link_pattern.findall(markdown.read_text()):
+        if raw.startswith(("http://", "https://", "#")):
+            continue
+        target = (markdown.parent / raw.split("#", 1)[0]).resolve()
+        if root not in target.parents or not target.exists():
+            raise SystemExit(f"broken local skill reference: {markdown.relative_to(root)} -> {raw}")
+docs_skill = root / ".agents/skills/docs-maintainer"
+docs_skill_text = (docs_skill / "SKILL.md").read_text()
+if "references/repository-profile.md" not in docs_skill_text:
+    raise SystemExit("docs-maintainer must route to its repository profile")
+docs_profile = (docs_skill / "references/repository-profile.md").read_text()
+for owner in ("docs/README.md", "docs/runbooks/", "docs/critical-journeys/journeys.json", "docs/proof/", "docs/governance/", "docs/evidence/"):
+    if owner not in docs_profile:
+        raise SystemExit(f"docs-maintainer profile missing owner: {owner}")
+package_profile = (root / ".agents/skills/package-structure/references/repository-profile.md").read_text()
+if "Documentation router:" in package_profile or "Runbook owner:" in package_profile:
+    raise SystemExit("package profile must not compete with docs-maintainer ownership")
 for package in ("domain", "rpc", "http-api"):
     subprocess.run(["python3", str(package_validator), str(root / "packages" / package)], check=True)
 subprocess.run(["python3", str(root / "tools/governance/validate.py"), str(root)], check=True)

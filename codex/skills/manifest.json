@@ -4,8 +4,13 @@
   "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
   "sourcePath": "codex/skills",
   "installedProjection": "~/.codex/skills",
-  "projectionDigest": "12c9a8931c0282383620a1f5e4765a43251574f3b6614cc83b81148aede02cf9",
+  "projectionDigest": "26377941eee3f15d856d5f4d92ab4e4fe4d60a402baa228979b33933ba885de4",
   "skills": [
+    {
+      "name": "docs-maintainer",
+      "fileCount": 5,
+      "treeDigest": "f4bd877d33454ef25fcf7fbc471c039a06c40bdaf83fc0611d3c76616d22ddf6"
+    },
     {
       "name": "effect-client-wrapper",
       "fileCount": 2,
@@ -14,27 +19,27 @@
     {
       "name": "package-structure",
       "fileCount": 50,
-      "treeDigest": "f41511c2255917732201e28010a35e0de08b0fa4dfa1ef5f804da158cda50316"
+      "treeDigest": "cb791ea1afe0550881f04ff271a888b41792ef195807019ede2628ce38e38338"
     },
     {
       "name": "prd-implementer",
       "fileCount": 2,
-      "treeDigest": "441bf6d7512f2ed31d4aeda27af852556bf46cff5258a357791b94a901fd9629"
+      "treeDigest": "d26bd470d5e72e617f9d1cdd81dbcae66b802b1a4c418e662face96b8ee59426"
     },
     {
       "name": "prd-review",
       "fileCount": 2,
-      "treeDigest": "57094a3c5178bf99c136de9fc87bd039b75c9e2e2d2483dcdc33403faa86880b"
+      "treeDigest": "05058ddbf71f4ad0aa616d8bdd67ad343a179c6aa197f4fa4686ff7b3704272b"
     },
     {
       "name": "prd-writer",
       "fileCount": 2,
-      "treeDigest": "c8820e5f0825c7b6772832c5685db1edcb1bbe9d1c1cb4576b213d4de57d38d3"
+      "treeDigest": "0cd129dad5b1fd781e1211a211c7dff449e2f2db54ed93bc82623e25583d3fd1"
     },
     {
       "name": "repo-structure",
-      "fileCount": 97,
-      "treeDigest": "271e86b00568529d11d7db4605cc1a1d253a9b9dd954f121432149b847f4fe8e"
+      "fileCount": 100,
+      "treeDigest": "5a9fdd69477d9895dcd6648da3fec82add8a03d2d8ee6add6ab1fe747b467042"
     }
   ]
 }

@@ -68,6 +68,35 @@ with tempfile.TemporaryDirectory(prefix="repo-structure-cases-") as raw:
     path.write_text(json.dumps(data))
     cases["missing-retirement"] = run_validator(retirement).returncode != 0
 
+    missing_profile = temp / "missing-docs-maintainer-profile"
+    shutil.copytree(golden, missing_profile)
+    (missing_profile / ".agents/skills/docs-maintainer/references/repository-profile.md").unlink()
+    cases["missing-docs-maintainer-profile"] = run_validator(missing_profile).returncode != 0
+
+    broken_reference = temp / "broken-docs-maintainer-reference"
+    shutil.copytree(golden, broken_reference)
+    path = broken_reference / ".agents/skills/docs-maintainer/SKILL.md"
+    path.write_text(path.read_text().replace("references/repository-profile.md", "references/missing-profile.md"))
+    cases["broken-docs-maintainer-reference"] = run_validator(broken_reference).returncode != 0
+
+    competing_owner = temp / "competing-doc-owner"
+    shutil.copytree(golden, competing_owner)
+    path = competing_owner / ".agents/skills/package-structure/references/repository-profile.md"
+    path.write_text(path.read_text() + "\n- Documentation router: `README.md`\n")
+    cases["competing-doc-owner"] = run_validator(competing_owner).returncode != 0
+
+    undocumented_export = temp / "undocumented-package-export"
+    shutil.copytree(golden, undocumented_export)
+    path = undocumented_export / "packages/http-api/README.md"
+    path.write_text(path.read_text().replace("- `./api`: public HTTP API contract.\n", ""))
+    cases["undocumented-package-export"] = run_validator(undocumented_export).returncode != 0
+
+    missing_runbook_applicability = temp / "missing-runbook-applicability"
+    shutil.copytree(golden, missing_runbook_applicability)
+    path = missing_runbook_applicability / "packages/rpc/README.md"
+    path.write_text(path.read_text().replace("## Runbook applicability", "## Operations"))
+    cases["missing-runbook-applicability"] = run_validator(missing_runbook_applicability).returncode != 0
+
     if not all(cases.values()):
         raise SystemExit(json.dumps({"status":"failed","cases":cases}))
     print(json.dumps({"status":"passed","golden":"validated","adversarial":cases,"nonClaims":["No dependencies were installed and no provider behavior was tested."]}))

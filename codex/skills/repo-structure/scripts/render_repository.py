@@ -102,6 +102,7 @@ def main() -> None:
         else SKILL.parent
     )
     package_skill = resolve_skill(skills_root, "package-structure")
+    resolve_skill(skills_root, "docs-maintainer")
     versions_path = Path(args.versions).resolve(strict=True)
     versions = json.loads(versions_path.read_text())
     if not isinstance(versions.get("sources"), dict) or not versions["sources"]:

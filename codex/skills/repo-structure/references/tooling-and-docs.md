@@ -12,7 +12,8 @@ as a template.
 
 Documentation must include root/app/package READMEs; architecture pages for
 package ownership, Effect services, frontend composition, testing/quality, and
-tooling; product-spec and exec-plan indexes; and skill/update guidance. Validate
+tooling; product-spec and exec-plan indexes; and a portable local
+docs-maintainer with its own repository owner/check profile. Validate
 links, commands, export paths, metadata, and stale paths—not only presence.
 
 The governance validator checks unique semantic owners, lifecycle and

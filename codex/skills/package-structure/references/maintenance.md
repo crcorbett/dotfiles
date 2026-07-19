@@ -7,12 +7,14 @@ Canonical ownership:
 - `scripts/render_package.py` owns rendering and write safety.
 - `scripts/validate_package.py` owns structural/semantic package checks.
 - `scripts/validate_ecosystem.py` owns scoped stale-pattern checks.
-- repository-local profiles own only local facts.
+- the repository-local package profile owns only local package facts;
+- the repository-local docs-maintainer profile owns local documentation,
+  lifecycle, runbook, proof, authority, archive, checks, and mirror facts.
 
-Profiles route the docs index, architecture, runbooks, proof, critical journeys,
-authority, evidence/archive, README rules, exact checks, generated owners,
-exceptions, and mirror policy. Do not copy those local facts into this global
-skill.
+The docs-maintainer profile routes the docs index, architecture, runbooks,
+proof, critical journeys, authority, evidence/archive, README rules, exact
+checks, generated owners, and mirror policy. Do not copy those local facts into
+this global skill or the package profile.
 
 When Effect or transport APIs change:
 

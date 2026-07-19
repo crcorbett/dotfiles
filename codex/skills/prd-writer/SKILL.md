@@ -89,12 +89,14 @@ Add an impact ledger in the SPEC and task list. Mark each surface `Change requir
 - repository-owned skills, `AGENTS.md`, skill metadata, references, scripts, and templates;
 - manifests, configuration, Schemas, migrations, generators, fixtures, tests, observability, release, rollout, and rollback artifacts.
 
-Route documentation maintenance through the repository's local
-`docs-maintainer` profile when it exists. The global method may require owner,
-class, impact, lifecycle, proof, and non-claims; only the repository may supply
-exact commands, current provider facts, archive policy, mirror rules, or local
-exceptions. A SPEC must require owning docs and necessary pointers to change in
-the same implementation slice, not as final cleanup.
+Load the sibling [`docs-maintainer`](../docs-maintainer/SKILL.md) during impact
+design, then its repository-local profile when present. The SPEC's
+documentation-impact contract names the semantic owner, lifecycle transition,
+affected paths and pointers, generated source/action, exact repository checks,
+proof location, and non-claims. Only the repository supplies commands, current
+provider facts, archive policy, mirrors, and exceptions. Require owning docs
+and necessary pointers to change in the same implementation slice, not as
+final cleanup or a terminal catch-all documentation task.
 
 For every required change, name the exact path or narrow path set, dependency order, acceptance criterion, and real repository command or inspection that proves it. Never invent command names.
 
@@ -103,6 +105,8 @@ For every required change, name the exact path or narrow path set, dependency or
 - Edit the SPEC and its canonical sibling task artifact in place as evidence changes the design.
 - Keep tasks atomic, ordered, end-to-end, and traceable to SPEC requirements.
 - Put the relevant Effect, wrapper, helper-sprawl, React, documentation, lint, and skill acceptance rules inside every affected task rather than relying on one global reminder.
+- Carry the applicable documentation-impact rows inside each owning task; do
+  not delegate them to a separate end-of-project documentation task.
 - Require targeted tests and the repository's actual formatting, lint, typecheck, build, runtime, browser, and skill-validation commands.
 - Require implementation discoveries to update the SPEC, tasks, diagrams, docs, READMEs, and enforcement before the task can pass.
 - Require each command/manual/provider/fresh-context check to name repository,

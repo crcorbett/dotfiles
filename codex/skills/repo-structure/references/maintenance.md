@@ -5,7 +5,9 @@ Canonical owners:
 - package files: global `package-structure/assets` only;
 - root/app/docs/tool files: `repo-structure/assets/repository`;
 - resolved versions: `repo-structure/assets/version-snapshot.json`;
-- local repository facts: each repo's local package profile;
+- local package facts: each repo's local package profile;
+- local document, lifecycle, runbook, proof, and archive facts: each repo's
+  local docs-maintainer profile;
 - lint policy: generated `tools/oxlint` rule implementation/tests;
 - skill baseline: renderer-resolved generic skills plus self-contained local
   router assets; rendered skills must not retain a global installation path.

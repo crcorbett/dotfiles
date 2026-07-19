@@ -12,9 +12,11 @@ on its filesystem path.
 
 ## Establish ownership
 
-1. Read `AGENTS.md`, the profile in `references/repository-profile.md`, the
-   affected package `README*`, and only the owners routed from `docs/README.md`
-   for the change (normally package ownership, Effect services, and quality).
+1. Read `AGENTS.md`, the package profile in
+   `references/repository-profile.md`, then the sibling
+   [`docs-maintainer`](../docs-maintainer/SKILL.md) and its
+   `references/repository-profile.md`. Read the affected package `README*` and
+   only the routed owners needed for the change.
 2. Inspect the worktree and preserve unrelated changes.
 3. Name the capability, callers, untrusted boundaries, and runtime owner.
    Reject a new package for one-use code, a pass-through wrapper, or a generic
@@ -73,3 +75,5 @@ bun run verification
 Also run applicable package build, export-consumer, packed-artifact, integration,
 and downstream checks. Report the ownership decision, exports, Layers,
 documentation/proof impact, exact commands, and any path-specific exception.
+Run the docs-maintainer profile's applicable checks and attach its impact rows,
+limitations, and non-claims.

@@ -38,12 +38,15 @@ independent evidence boundary.
 Use three phases so exhaustive accounting does not preload unrelated context:
 
 1. **Grounding:** read the SPEC/tasks, root instructions, owning architecture,
-   directly affected `README*`, code, configuration, and commands.
+   directly affected `README*`, code, configuration, and commands. Load the
+   sibling [`docs-maintainer`](../docs-maintainer/SKILL.md) and its local
+   repository profile when present.
 2. **Investigation:** expand only for unresolved local decisions and upstream
    library questions; delegate only under the evidence rule above.
 3. **Landing:** build an inventory with `rg --files` and read, rather than merely
    grep, every repository-owned readable text file under `docs/**` plus every
-   repository `README*`. Reconcile contradictions and edit the SPEC/tasks.
+   repository `README*`. Re-run the docs-maintainer owner map and exact checks,
+   reconcile contradictions, and edit the SPEC/tasks.
 
 Include nested READMEs and documentation that conflicts with the SPEC. Exclude
 dependency trees, generated build output, vendored repositories, and `.git`.
@@ -136,13 +139,7 @@ Perform an explicit impact pass and add required changes to the SPEC and tasks f
 
 For every surface, mark it `Change required`, `Preserve`, or `N/A` with repository evidence. For each required change, name the exact file or narrowly bounded file set, the content or rule to change, its dependency/order, its acceptance criterion, and the command or inspection that proves completion. Do not add generic tasks such as "update docs," "fix lint," or "update skills."
 
-Prefer updating the canonical source and its necessary pointers over duplicating the same guidance across files. Treat user-global skills or artifacts outside the repository as out of scope unless the user explicitly includes them.
-
-When a repository-local `docs-maintainer` profile exists, invoke its owner map
-and exact checks during grounding and landing. The global review method never
-invents local commands, provider state, archive rules, mirrors, or exceptions.
-Require documentation owners and pointers to be edited during the owning
-implementation slice rather than deferred to closeout.
+Prefer updating the canonical source and its necessary pointers over duplicating the same guidance across files. Treat user-global skills or artifacts outside the repository as out of write scope unless the user explicitly includes them; a global skill may still supply an invoked method. The docs-maintainer method never invents local commands, provider state, archive rules, mirrors, or exceptions. Require documentation owners and pointers to be edited during the owning implementation slice rather than deferred to closeout.
 
 ## Apply improvements to the SPEC and tasks
 
@@ -233,6 +230,9 @@ Do not invent command names. If the repository lacks a needed rule, state the ru
 4. Remove duplicated, contradictory, stale, or non-actionable prose and tasks.
 5. Re-read the full diff against the original intent and the evidence map.
 6. Run available documentation formatting or lint checks plus `git diff --check`; otherwise inspect headings, links, code fences, and internal consistency manually.
+7. Confirm the docs-maintainer impact ledger, semantic owners, lifecycle
+   transitions, exact checks, proof, and non-claims agree with the landed
+   SPEC/tasks.
 
 Finish with a concise report containing:
 

@@ -74,13 +74,19 @@ for relative, expected in render.get("configDigests", {}).items():
     observed = hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() else None
     if observed != expected:
         fail(f"rendered config digest mismatch: {relative}")
-readme = (root / "README.md").read_text()
-for phrase in ("repository", "runbook", "proof"):
-    if phrase not in readme.lower():
-        fail(f"README must route {phrase} ownership")
 exports = manifest.get("exports")
 if not isinstance(exports, dict) or not exports:
     fail("package exports must be explicit")
+readme = (root / "README.md").read_text()
+for heading in ("## Exports", "## Documentation impact", "## Runbook applicability", "## Non-claims"):
+    if heading not in readme:
+        fail(f"README missing required section: {heading}")
+for export_name in exports:
+    if f"`{export_name}`" not in readme:
+        fail(f"README must document exact export {export_name}")
+for phrase in ("repository", "runbook", "proof"):
+    if phrase not in readme.lower():
+        fail(f"README must route {phrase} ownership")
 publish = manifest.get("publishConfig", {}).get("exports", {})
 source_conditions: set[str] = set()
 for name, value in exports.items():

@@ -20,10 +20,11 @@ updateable. Resolve current versions first; render only from a recorded snapshot
    [TanStack and Effect architecture](references/tanstack-effect.md), and
    [tooling and docs](references/tooling-and-docs.md).
 4. Load the canonical sibling
-   [`package-structure`](../package-structure/SKILL.md) skill. Resolve it
+   [`package-structure`](../package-structure/SKILL.md) and
+   [`docs-maintainer`](../docs-maintainer/SKILL.md) skills. Resolve them
    relative to this installed skill collection, or pass the skill collection
-   explicitly to the renderer. Stop before rendering if it is unavailable; do
-   not invent package contracts or assume a user's home directory.
+   explicitly to the renderer. Stop before rendering if either is unavailable;
+   do not invent package/document contracts or assume a user's home directory.
 
 ## Resolve or select versions
 
@@ -68,7 +69,9 @@ receipt to `bun.lock`; do not claim a bootstrapped fixture before that phase.
 
 Use `--skills-root /absolute/skill-collection` only when the sibling skills are
 installed outside the default collection. Generated repository-local skills
-must remain useful without that global collection after rendering.
+must remain useful without that global collection after rendering. The output
+includes a standalone thin local docs-maintainer and repository profile rather
+than a dependency on the global installation.
 
 ## Enforce the architecture
 
@@ -104,3 +107,6 @@ Inspect export consumers and generated docs in addition to command status. Read
 [maintenance](references/maintenance.md) before changing versions, assets,
 profiles, rules, or skill baselines. Report exact commands, exit codes, and any
 blocked upstream incompatibility; do not waive a failing compatibility fixture.
+Use the generated docs-maintainer owner map and lifecycle/skill checks for
+documentation impact, and retain a bounded impact receipt with explicit
+non-claims.

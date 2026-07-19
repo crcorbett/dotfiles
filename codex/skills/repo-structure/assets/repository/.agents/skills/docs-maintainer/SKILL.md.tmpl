@@ -1,0 +1,59 @@
+---
+name: docs-maintainer
+description: Audit and edit this repository's documentation when code, commands, APIs, Effect boundaries, React behavior, configuration, CI, infrastructure, operations, skills, or active SPEC/tasks change. Use during PRD writing/review, each material implementation slice, documentation audits, and final closeout. Update canonical owners in the same authorized slice, distinguish durable docs from runbooks and dated proof, and use this repository's exact checks.
+---
+
+# Repository Docs Maintainer
+
+Keep repository behavior, current documentation, and active task context aligned
+without duplicating truth.
+
+## Establish ownership
+
+1. Read applicable `AGENTS.md`, inspect the worktree and authority, then read
+   [repository profile](references/repository-profile.md) completely.
+2. Read the directly affected code/config, current semantic owners, necessary
+   READMEs/pointers, and active SPEC/tasks. Expand to the full docs/README corpus
+   only for a repository-wide audit or PRD review.
+3. Keep external live state, repository desired state, durable explanation,
+   dated proof, and active task intent distinct. Provider output is evidence,
+   not authority or durable policy.
+4. In attached implementation mode, edit owning docs and pointers in the same
+   slice. Without write/publication authority, keep findings in an isolated
+   candidate with provenance, freshness, audience, proposed owner, target
+   revision, limitations, and non-claims.
+
+## Reconcile the change
+
+For each affected surface, record `Change required`, `Preserve`, or justified
+`N/A`: docs/router; root/app/package READMEs; architecture/standards/API and
+generated references; runbooks; journeys/proof/evidence; skills/mirrors; lint,
+config, CI, tests; migrations/release; and active SPEC/tasks.
+
+- Update the earliest semantic owner, then only required pointers. Retire or
+  tombstone weaker copies.
+- Keep durable design in architecture, entry/setup in READMEs, and exact
+  consequential procedures in runbooks with preconditions, authority, steps,
+  receipts, rollback, and escalation.
+- Edit generated sources and run the named generator; never hand-edit output.
+- Put mutable observations and failed/no-op/inconclusive results in dated
+  evidence with provenance, recovery, resume trigger, and successor.
+- Keep root `AGENTS.md` terse; never append completed-feature history.
+- For repeated findings, strengthen the earliest schema, type, lint rule, test,
+  generator, runbook, or canonical doc and retire weaker reminders.
+
+## Prove and close
+
+Run only the exact applicable commands from the profile, plus the focused
+product or provider journey needed for the claim. Mechanical checks prove
+structure, not semantic accuracy; local checks do not prove deployment.
+
+Return a bounded receipt with changed owners, impact rows, commands and
+postconditions, artifact/environment/authority, stable journey IDs and oracles,
+proof paths, limitations, non-claims, rollback, and next owner. Preserve the
+complete sanitized output and true exit/cancellation state before bounding the
+display; do not mask failure with an early-closing pipe.
+
+Before task/SPEC closeout, reconcile active planning lifecycle, successor and
+archive pointers, proof, and non-claims. Stop if ownership is unresolved, a
+generated source/check is unknown, or provider/publication authority is absent.

@@ -40,11 +40,17 @@ and task closure.
 For each task:
 
 1. Re-state its owning paths, dependencies, acceptance criteria, and verification.
-2. Implement the smallest complete vertical slice.
-3. Update the SPEC, tasks, diagrams, docs, READMEs, lint/configuration, skills, and operational artifacts immediately when implementation evidence changes them.
-4. Audit the diff for architecture, helper sprawl, boundary provenance, React composition, and enforcement.
-5. Run the narrow proof first and broaden according to blast radius.
-6. Record evidence and mark completion only when every required surface passes.
+2. For a material slice, load the sibling
+   [`docs-maintainer`](../docs-maintainer/SKILL.md) and its local profile when
+   present; establish the slice's documentation-impact rows.
+3. Implement the smallest complete vertical slice.
+4. Update the SPEC, tasks, diagrams, owning docs, necessary pointers, READMEs,
+   lint/configuration, skills, and operational artifacts immediately when
+   implementation evidence changes them.
+5. Audit the diff for architecture, helper sprawl, boundary provenance, React composition, and enforcement.
+6. Run the narrow proof first and broaden according to blast radius.
+7. Record evidence and mark completion only when every required surface and
+   documentation-impact row passes.
 
 Do not preserve a fixed number of passes, subagents, files, or commands as a
 process goal. Risk, dependencies, accepted outcomes, and evidence determine the
@@ -99,8 +105,17 @@ For material tasks, also reconcile the complete harness contract:
   with provenance, successor/tombstone, recovery, and explicit non-claims
   outside the default context route.
 
-Invoke the repository-local `docs-maintainer` profile when present. It owns the
-local document map, exact checks, archive and mirror rules, runbooks, and
-exceptions; this global skill must not invent them. Update owning docs and
-necessary pointers inside the implementation slice. Mark every impact-ledger
-surface `Change required`, `Preserve`, or `N/A` with evidence before closure.
+The docs-maintainer method and local profile own the local document map, exact
+checks, archive and mirror rules, runbooks, and exceptions; this skill must not
+invent them. Update owning docs and necessary pointers inside the
+implementation slice. Mark every impact-ledger surface `Change required`,
+`Preserve`, or `N/A` with evidence and attach its bounded receipt before task
+acceptance.
+
+## Close out the SPEC
+
+Invoke docs-maintainer again before final task or SPEC closeout. Reconcile the
+active SPEC, tasks, execution plan, lifecycle state, successor/tombstone and
+archive pointers, proof packets, limitations, and non-claims against the
+implemented repository. Run the exact local documentation and lifecycle checks
+and mark completion only after current owners and planning artifacts agree.

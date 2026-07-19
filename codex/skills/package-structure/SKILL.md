@@ -14,11 +14,14 @@ repository contract before the generic templates.
    manifests, TypeScript/lint/test config, and current package exemplars.
 2. If invoked through a repository-local same-name skill, read its
    `references/repository-profile.md` first. That profile owns package manager,
-   namespace, source condition, docs/runbook/proof routes, exceptions, forbidden
-   paths, and commands.
-3. Inspect the worktree before writes. Preserve unrelated changes and do not
+   namespace, source condition, package exceptions, forbidden paths, and
+   package commands.
+3. Load the sibling [`docs-maintainer`](../docs-maintainer/SKILL.md) and its
+   repository-local profile when present. That profile—not the package
+   profile—owns documentation, runbook, proof, lifecycle, and archive routes.
+4. Inspect the worktree before writes. Preserve unrelated changes and do not
    scaffold into a package until ownership is decided.
-4. Load [package contract](references/package-contract.md), then only the
+5. Load [package contract](references/package-contract.md), then only the
    relevant variant section in [variants](references/variants.md).
 
 ## Select the variant
@@ -103,8 +106,9 @@ actual publisher; `publishConfig.exports` alone is not proof that npm or Bun
 removed the development source condition.
 
 For new or changed skill folders, run the global skill validator separately.
-Report the selected variant, ownership decision, exports, documentation/proof
-impact, tests, commands, and any repository-specific exception. Render receipts
+Run the local docs-maintainer checks and attach the applicable impact rows and
+non-claims. Report the selected variant, ownership decision, exports,
+documentation/proof impact, tests, commands, and any repository-specific exception. Render receipts
 retain official sources, qualified compatibility decisions, config digests,
 limitations, and non-claims. Read [maintenance](references/maintenance.md)
 when updating templates, validators, or Effect APIs.
