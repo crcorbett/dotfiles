@@ -47,6 +47,9 @@ config, CI, tests; migrations/release; and active SPEC/tasks.
 Run only the exact applicable commands from the profile, plus the focused
 product or provider journey needed for the claim. Mechanical checks prove
 structure, not semantic accuracy; local checks do not prove deployment.
+Never fabricate an artifact identity, path, edit, command, exit status, or
+executed check. Without an available checkout or exact owner/check, return an
+`unverified` gap rather than an attached edit or accepted outcome.
 
 Return a bounded receipt with changed owners, impact rows, commands and
 postconditions, artifact/environment/authority, stable journey IDs and oracles,

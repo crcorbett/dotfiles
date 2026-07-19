@@ -131,6 +131,10 @@ Read [proof-authority-and-lifecycle.md](references/proof-authority-and-lifecycle
 Run the exact local documentation, link, generated-artifact, lint, typecheck,
 test, build, journey, skill, and mirror checks required by the impact ledger.
 Do not invent commands. Distinguish pre-existing failures from regressions.
+Never fabricate an artifact identity, path, edit, command, exit status, or
+executed check. When no checkout or repository-local owner map is available,
+return only class-level proposed owners with status `unverified`; do not report
+an attached edit or accepted outcome.
 
 Return a bounded receipt containing:
 
