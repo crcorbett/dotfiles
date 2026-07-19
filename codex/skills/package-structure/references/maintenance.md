@@ -9,6 +9,11 @@ Canonical ownership:
 - `scripts/validate_ecosystem.py` owns scoped stale-pattern checks.
 - repository-local profiles own only local facts.
 
+Profiles route the docs index, architecture, runbooks, proof, critical journeys,
+authority, evidence/archive, README rules, exact checks, generated owners,
+exceptions, and mirror policy. Do not copy those local facts into this global
+skill.
+
 When Effect or transport APIs change:
 
 1. research the upstream library through DeepWiki/official versioned sources;

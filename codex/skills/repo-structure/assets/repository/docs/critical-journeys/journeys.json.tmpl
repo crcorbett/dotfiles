@@ -1,0 +1,33 @@
+{
+  "$schema": "../../tools/governance/schemas/critical-journeys.schema.json",
+  "version": 1,
+  "journeys": [
+    {
+      "id": "home-page",
+      "owner": "apps/web",
+      "entrypoint": "/",
+      "observableOutcome": "The application renders its home route without a fatal error.",
+      "verification": ["bun run test", "bun run build"],
+      "evidenceOwner": "docs/proof/",
+      "limitations": ["Local build and tests do not prove a deployed provider route."]
+    },
+    {
+      "id": "http-item-list",
+      "owner": "packages/http-api",
+      "entrypoint": "/api/items",
+      "observableOutcome": "The HTTP boundary returns a schema-decoded domain item list.",
+      "verification": ["bun --filter __SCOPE__/http-api test", "bun run check-types"],
+      "evidenceOwner": "docs/proof/",
+      "limitations": ["In-process transport tests do not prove a deployed public route."]
+    },
+    {
+      "id": "rpc-item-list",
+      "owner": "packages/rpc",
+      "entrypoint": "/rpc",
+      "observableOutcome": "The RPC client invokes the schema-owned list operation through its handler Layer.",
+      "verification": ["bun --filter __SCOPE__/rpc test", "bun run check-types"],
+      "evidenceOwner": "docs/proof/",
+      "limitations": ["In-process RPC tests do not prove deployed network reachability."]
+    }
+  ]
+}

@@ -45,6 +45,13 @@ def load_versions(path: Path) -> dict[str, str]:
     effect = data.get("packages", {}).get("effect")
     if not isinstance(effect, str) or not re.fullmatch(r"4\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?", effect):
         raise ValueError("version snapshot needs an exact Effect v4 version")
+    if any(not isinstance(value, str) or value.lower() == "latest" for value in data["packages"].values()):
+        raise ValueError("version snapshot needs exact selected versions, never latest")
+    if not isinstance(data.get("sources"), dict) or not data["sources"]:
+        raise ValueError("version snapshot needs official sources")
+    decisions = data.get("compatibilityDecisions")
+    if not isinstance(decisions, list) or any(item.get("status") != "qualified" for item in decisions):
+        raise ValueError("version snapshot needs qualified compatibility decisions")
     return data
 
 
@@ -91,6 +98,7 @@ def render(args: argparse.Namespace) -> Path:
                 content = content.replace(old, new)
             output.write_text(content)
         manifest = {
+            "schemaVersion": 1,
             "kind": args.kind,
             "packageName": args.package_name,
             "domainPackage": args.domain_package,
@@ -101,6 +109,15 @@ def render(args: argparse.Namespace) -> Path:
                     Path(args.versions).resolve().read_bytes()
                 ).hexdigest(),
             },
+            "officialSources": versions["sources"],
+            "selectedVersions": versions["packages"],
+            "compatibilityDecisions": versions["compatibilityDecisions"],
+            "configDigests": {
+                path: hashlib.sha256((stage / path).read_bytes()).hexdigest()
+                for path in ("package.json", "tsconfig.json", "tsconfig.build.json", "vitest.config.ts")
+            },
+            "limitations": ["Structural rendering does not prove installed dependency, declaration, runtime, or packed-consumer behavior."],
+            "nonClaims": ["Selected versions are not claimed to remain latest."],
         }
         (stage / "package-structure.render.json").write_text(json.dumps(manifest, indent=2) + "\n")
         subprocess.run(

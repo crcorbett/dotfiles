@@ -1,5 +1,11 @@
 # `__PACKAGE_NAME__`
 
-Effect RPC transport over `__DOMAIN_PACKAGE__`. __DOMAIN_SYMBOL__ policy remains in the
+Effect RPC transport over `__DOMAIN_PACKAGE__`. `__DOMAIN_SYMBOL__` policy remains in the
 domain service; this package owns the RPC contract, handlers, clients, and HTTP
 mounting.
+
+Import the client contract from `/service`, production composition from `/live`,
+and deterministic in-process support from `/test`. Public RPC changes update the
+repository transport architecture owner and affected critical journeys/proof in the
+same slice. Provider operations, authority, and runbooks remain repository-owned;
+this package makes no deployment or network-reachability claim.

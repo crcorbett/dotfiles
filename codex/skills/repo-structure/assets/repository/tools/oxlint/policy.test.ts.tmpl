@@ -13,13 +13,13 @@ describe("repository policy", () => {
   test("workspace/source-condition-order", () => {
     expect(
       sourceConditionFirst(
-        { "__SOURCE_CONDITION__": "src", types: "d.ts", default: "js" },
+        { ["__SOURCE_CONDITION__"]: "src", types: "d.ts", default: "js" },
         "__SOURCE_CONDITION__",
       ),
     ).toBe(true);
     expect(
       sourceConditionFirst(
-        { types: "d.ts", "__SOURCE_CONDITION__": "src", default: "js" },
+        { types: "d.ts", ["__SOURCE_CONDITION__"]: "src", default: "js" },
         "__SOURCE_CONDITION__",
       ),
     ).toBe(false);
@@ -37,7 +37,7 @@ describe("repository policy", () => {
   test("effect/scans-maintained-source", async () => {
     const root = new URL("../../", import.meta.url).pathname;
     const files = Array.from(
-      new Bun.Glob("{apps,packages}/**/*.{ts,tsx}").scanSync({
+      new Bun.Glob("{apps,packages}/*/src/**/*.{ts,tsx}").scanSync({
         cwd: root,
         onlyFiles: true,
       }),

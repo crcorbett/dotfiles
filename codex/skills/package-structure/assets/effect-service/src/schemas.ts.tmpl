@@ -1,6 +1,8 @@
 import { Schema } from "effect";
 
-export const __SYMBOL__Id = Schema.Trimmed.check(Schema.isMinLength(1)).pipe(Schema.brand("__SYMBOL__Id"));
+export const __SYMBOL__Id = Schema.Trimmed.check(Schema.isMinLength(1)).pipe(
+  Schema.brand("__SYMBOL__Id"),
+);
 export type __SYMBOL__Id = typeof __SYMBOL__Id.Type;
 
 export const __SYMBOL__Item = Schema.Struct({

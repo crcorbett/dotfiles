@@ -4,7 +4,7 @@
   "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
   "sourcePath": "codex/skills",
   "installedProjection": "~/.codex/skills",
-  "projectionDigest": "02581ef873bc32517cb1aded235939e6f9cdaef2378a5f379c66b0d48ac41a44",
+  "projectionDigest": "12c9a8931c0282383620a1f5e4765a43251574f3b6614cc83b81148aede02cf9",
   "skills": [
     {
       "name": "effect-client-wrapper",
@@ -13,8 +13,8 @@
     },
     {
       "name": "package-structure",
-      "fileCount": 52,
-      "treeDigest": "e9bd39ccc9b9f781ede1442f09ff679fdea6a76f23c3b153433f9867e4a36604"
+      "fileCount": 50,
+      "treeDigest": "f41511c2255917732201e28010a35e0de08b0fa4dfa1ef5f804da158cda50316"
     },
     {
       "name": "prd-implementer",
@@ -33,8 +33,8 @@
     },
     {
       "name": "repo-structure",
-      "fileCount": 64,
-      "treeDigest": "02bc7322b28441570af4b9d59e7f68086987311dc53c8ce4a708d9b12d78c1e4"
+      "fileCount": 97,
+      "treeDigest": "271e86b00568529d11d7db4605cc1a1d253a9b9dd954f121432149b847f4fe8e"
     }
   ]
 }

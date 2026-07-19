@@ -30,6 +30,11 @@ Use `mock.layer.ts` only when its semantics are distinct from the deterministic
 test Layer. Tests live under `test/`; `src/__testing__` contains reusable setup,
 fixtures, and observations only.
 
+Each package README names the semantic owner, public/live/test export paths,
+downstream architecture/proof impact, runbook applicability, and explicit
+non-claims. Repository profiles—not this global contract—name exact local
+commands and document paths.
+
 ## Export proof
 
 Consumer fixtures must prove all four modes:

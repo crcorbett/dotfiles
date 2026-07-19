@@ -1,9 +1,37 @@
 {
   "resolvedAt": "2026-07-19",
   "effectChannel": "beta",
-  "observedLatestEffect": "4.0.0-beta.99",
+  "observedEffectBetaAtResolution": "4.0.0-beta.99",
   "effectCompatibilityNote": "beta.99 is validated with skipLibCheck at package boundaries because the published unstable HTTP declarations currently reference a non-exported internal helper; public API fixtures still typecheck and execute.",
   "tanstackAppVerbatimModuleSyntax": false,
+  "sources": {
+    "npmRegistry": "https://registry.npmjs.org/",
+    "effect": "https://www.npmjs.com/package/effect",
+    "tanstackStart": "https://www.npmjs.com/package/@tanstack/react-start",
+    "alchemy": "https://www.npmjs.com/package/alchemy",
+    "alchemyCloudflare": "https://v2.alchemy.run/cloudflare/",
+    "cloudflareWorkers": "https://developers.cloudflare.com/workers/"
+  },
+  "compatibilityDecisions": [
+    {
+      "id": "effect-ecosystem",
+      "status": "qualified",
+      "decision": "Select one exact Effect v4 beta across Effect ecosystem packages.",
+      "evidence": "All rendered package variants and the repository fixture must pass structural, type, test, and build verification before this snapshot is replaced."
+    },
+    {
+      "id": "tanstack-start",
+      "status": "qualified",
+      "decision": "Select Start and Router independently and disable verbatimModuleSyntax at the app boundary for this snapshot.",
+      "evidence": "The rendered TanStack app fixture is the compatibility oracle."
+    },
+    {
+      "id": "alchemy-cloudflare",
+      "status": "qualified",
+      "decision": "Select the exact Alchemy beta used by the preview-only Cloudflare Website scaffold; any upgrade opens a new compatibility epoch.",
+      "evidence": "The scaffold must typecheck and build; no provider deployment is implied or performed."
+    }
+  ],
   "packages": {
     "effect": "4.0.0-beta.99",
     "@effect/platform-bun": "4.0.0-beta.99",
@@ -25,6 +53,7 @@
     "@types/bun": "1.3.14",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.3"
+    "@vitejs/plugin-react": "6.0.3",
+    "alchemy": "2.0.0-beta.62"
   }
 }

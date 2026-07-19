@@ -15,6 +15,13 @@ package ownership, Effect services, frontend composition, testing/quality, and
 tooling; product-spec and exec-plan indexes; and skill/update guidance. Validate
 links, commands, export paths, metadata, and stale paths—not only presence.
 
+The governance validator checks unique semantic owners, lifecycle and
+retirement metadata, local links, critical-journey oracles, automation and
+feedback controls, compatibility provenance, config digests, lockfile phase,
+limitations, and non-claims. Receipts are bounded envelopes; detailed output is
+stored by path/digest rather than embedded without limit. Failed and
+inconclusive evidence is preserved outside default navigation with provenance.
+
 Knip has development and production graphs. CI runs the same ordered gate after
 `bun install --frozen-lockfile`; the first generated lockfile is intentionally
 created by the user during bootstrap.

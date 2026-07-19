@@ -30,6 +30,9 @@
       "build": {
         "vite": "__VERSION_VITE__",
         "@vitejs/plugin-react": "__VERSION_VITEJS_PLUGIN_REACT__"
+      },
+      "infrastructure": {
+        "alchemy": "__VERSION_ALCHEMY__"
       }
     }
   },
@@ -40,14 +43,19 @@
     "format": "oxfmt .",
     "lint": "oxlint .",
     "test:lint-rules": "bun test tools/oxlint/policy.test.ts",
-    "check-types": "turbo run check-types",
+    "validate:governance": "python3 tools/governance/validate.py .",
+    "check-types": "tsc --noEmit -p tsconfig.infrastructure.json && turbo run check-types",
     "test": "turbo run test",
     "build": "turbo run build",
     "knip": "knip",
     "knip:production": "knip --production --config knip.production.ts --strict",
     "changeset": "changeset",
     "changeset:status": "changeset status",
-    "verification": "bun run format:check && bun run lint && bun run test:lint-rules && bun run check-types && bun run knip && bun run knip:production && bun run test && bun run build"
+    "verification": "bun run validate:governance && bun run format:check && bun run lint && bun run test:lint-rules && bun run check-types && bun run knip && bun run knip:production && bun run test && bun run build"
+  },
+  "dependencies": {
+    "alchemy": "catalog:infrastructure",
+    "effect": "catalog:effect"
   },
   "devDependencies": {
     "@changesets/cli": "__VERSION_CHANGESETS_CLI__",

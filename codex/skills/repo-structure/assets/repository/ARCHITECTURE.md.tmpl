@@ -1,0 +1,10 @@
+# Architecture
+
+The repository is a Bun/Turbo monorepo. `apps/web` owns the TanStack Start
+application and Effect execution. `packages/domain` owns semantic policy;
+`packages/rpc` and `packages/http-api` own transports; `packages/effect-start`
+owns framework codec adaptation.
+
+Focused architecture decisions live under [`docs/architecture/`](docs/architecture/).
+Operational procedures live under [`docs/runbooks/`](docs/runbooks/); proof and
+current task state are intentionally separate. Start at [`docs/README.md`](docs/README.md).

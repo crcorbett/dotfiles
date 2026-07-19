@@ -38,6 +38,8 @@ python3 scripts/resolve_versions.py --output /tmp/provisional-versions.json
 
 Effect ecosystem packages must share one exact v4 beta version until v4 is
 stable. TanStack Start and Router resolve independently. Never emit `latest`.
+Alchemy beta and the preview-only Cloudflare scaffold require an explicit
+qualified/rejected decision; never infer compatibility from a registry tag.
 Read [version policy](references/version-policy.md); a snapshot is adopted only
 after full compatibility rendering and verification.
 
@@ -58,6 +60,11 @@ The renderer stages root/app/docs/tooling assets, invokes the canonical package
 renderer for domain, RPC, and HTTP API packages, installs the repository skill
 baseline, validates, then atomically renames. It never templates lockfiles,
 generated route trees, output, caches, or dependency trees.
+
+The render receipt records official sources, selected versions, compatibility
+decisions, config digests, limitations, and an explicitly absent lockfile. After
+the first `bun install`, run `scripts/finalize_repository_receipt.py` to bind the
+receipt to `bun.lock`; do not claim a bootstrapped fixture before that phase.
 
 Use `--skills-root /absolute/skill-collection` only when the sibling skills are
 installed outside the default collection. Generated repository-local skills

@@ -14,7 +14,8 @@ repository contract before the generic templates.
    manifests, TypeScript/lint/test config, and current package exemplars.
 2. If invoked through a repository-local same-name skill, read its
    `references/repository-profile.md` first. That profile owns package manager,
-   namespace, source condition, exceptions, forbidden paths, and commands.
+   namespace, source condition, docs/runbook/proof routes, exceptions, forbidden
+   paths, and commands.
 3. Inspect the worktree before writes. Preserve unrelated changes and do not
    scaffold into a package until ownership is decided.
 4. Load [package contract](references/package-contract.md), then only the
@@ -79,6 +80,10 @@ python3 scripts/validate_package.py /absolute/package
 - Reject generic SDK callbacks, raw client access, unbranded semantic strings,
   primitive semantic config, runtime type-class branching, unchecked output,
   scattered Effect execution, and speculative helpers.
+- When a public schema/service/transport changes, update the repository's
+  architecture owner and affected proof/critical journeys in the same slice.
+  Operational packages route to a repository runbook; pure packages state why
+  no runbook applies.
 
 Read [Effect service rules](references/effect-service.md) before changing an
 external client or live Layer.
@@ -98,6 +103,8 @@ actual publisher; `publishConfig.exports` alone is not proof that npm or Bun
 removed the development source condition.
 
 For new or changed skill folders, run the global skill validator separately.
-Report the selected variant, ownership decision, exports, tests, commands, and
-any repository-specific exception. Read [maintenance](references/maintenance.md)
+Report the selected variant, ownership decision, exports, documentation/proof
+impact, tests, commands, and any repository-specific exception. Render receipts
+retain official sources, qualified compatibility decisions, config digests,
+limitations, and non-claims. Read [maintenance](references/maintenance.md)
 when updating templates, validators, or Effect APIs.

@@ -6,5 +6,17 @@
 - Source condition: `__SOURCE_CONDITION__`
 - Compiled package command: `tsc -p tsconfig.build.json`
 - Aggregate proof: `bun run verification`
+- Documentation router: `docs/README.md`
+- Documentation registry: `docs/documentation-map.json`
+- Architecture owner: `ARCHITECTURE.md` and `docs/architecture/`
+- Runbook owner: `docs/runbooks/`
+- Critical-journey owner: `docs/critical-journeys/journeys.json`
+- Proof owner: `docs/proof/`
+- Authority/control owner: `docs/governance/`
+- Evidence/archive owner: `docs/evidence/`
+- Documentation checks: repository structural validator, then aggregate proof
+- README rule: summarize and route; do not become a second semantic owner
+- Generated/reference owner: generators and lockfiles remain tool-owned; record digests in the render receipt
+- Mirror policy: repository-local skills are portable projections; repository docs remain canonical for local facts
 - Generated/forbidden writes: `node_modules`, `dist`, `.output`, `.turbo`, and
   generated `routeTree.gen.ts`

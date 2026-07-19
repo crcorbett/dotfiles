@@ -1,0 +1,17 @@
+import * as Alchemy from "alchemy";
+import * as Cloudflare from "alchemy/Cloudflare";
+import { Stack } from "alchemy/Stack";
+import { Effect } from "effect";
+
+export default Alchemy.Stack(
+  "__REPO_NAME__Cloudflare",
+  { providers: Cloudflare.providers(), state: Cloudflare.state() },
+  Effect.gen(function* () {
+    const stack = yield* Stack;
+    const website = yield* Cloudflare.Website.Vite("Website", {
+      compatibility: { flags: ["nodejs_compat"] },
+      rootDir: "apps/web",
+    });
+    return { stage: stack.stage, websiteUrl: website.url };
+  }),
+);

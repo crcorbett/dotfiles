@@ -1,5 +1,5 @@
 import { Effect, Layer } from "effect";
-import * as __SYMBOL__Test from "effect/unstable/rpc/__SYMBOL__Test";
+import * as EffectRpcTest from "effect/unstable/rpc/RpcTest";
 
 import { __SYMBOL__Group } from "./group";
 import { __SYMBOL__HandlersLive } from "./handlers";
@@ -7,7 +7,7 @@ import { __SYMBOL__Client } from "./service";
 
 export const __SYMBOL__ClientTest = Layer.effect(
   __SYMBOL__Client,
-  __SYMBOL__Test.makeClient(__SYMBOL__Group).pipe(
+  EffectRpcTest.makeClient(__SYMBOL__Group).pipe(
     Effect.map((client) =>
       __SYMBOL__Client.of({
         get: (id) => client.Get__DOMAIN_SYMBOL__({ id }),

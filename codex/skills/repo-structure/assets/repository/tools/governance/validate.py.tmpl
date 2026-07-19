@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Validate repository governance owners and bounded artifacts without dependencies."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+
+def fail(invariant: str, target: str, recovery: str) -> None:
+    print(json.dumps({"status":"failed","invariant":invariant,"target":target,"recovery":recovery,"details":None,"postcondition":"not established","nonClaims":["No repository verification claim was established."]}))
+    raise SystemExit(1)
+
+
+root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve(strict=True)
+docs_map_path = root / "docs/documentation-map.json"
+try:
+    docs_map = json.loads(docs_map_path.read_text())
+except (OSError, json.JSONDecodeError) as error:
+    fail("documentation registry is readable JSON", str(docs_map_path), str(error))
+owners = docs_map.get("owners")
+if docs_map.get("router") != "docs/README.md" or not isinstance(owners, list):
+    fail("one documentation router is declared", str(docs_map_path), "declare docs/README.md and an owners array")
+semantic_keys: set[str] = set()
+paths: set[str] = set()
+for owner in owners:
+    required = {"semanticKey","class","path","owner","status","reviewTriggers","retireWhen","replacedBy"}
+    if not isinstance(owner, dict) or not required.issubset(owner):
+        fail("documentation owner metadata is complete", str(docs_map_path), "add every lifecycle and retirement field")
+    if owner["semanticKey"] in semantic_keys or owner["path"] in paths:
+        fail("semantic owners and paths are unique", owner["semanticKey"], "retire the duplicate and route to one current owner")
+    semantic_keys.add(owner["semanticKey"])
+    paths.add(owner["path"])
+    target = (root / owner["path"]).resolve()
+    if root not in target.parents and target != root:
+        fail("documentation paths remain inside the repository", owner["path"], "use a repository-relative path")
+    if not target.is_file():
+        fail("registered documentation owner exists", owner["path"], "restore the owner or record its successor")
+    if owner["status"] == "current" and owner["replacedBy"] is not None:
+        fail("current owner has no successor", owner["semanticKey"], "mark it superseded or clear replacedBy")
+    if not owner["reviewTriggers"] or not owner["retireWhen"]:
+        fail("owner has review and retirement metadata", owner["semanticKey"], "add concrete reviewTriggers and retireWhen")
+
+for register_name in ("automation-register.json", "feedback-controls.json"):
+    path = root / "docs/governance" / register_name
+    register = json.loads(path.read_text())
+    for entry in register.get("entries", []):
+        for field in ("owner", "carryingCost", "reviewTrigger", "retireWhen"):
+            if not entry.get(field):
+                fail("control has maintenance and retirement metadata", f"{register_name}:{entry.get('id')}", f"add {field}")
+
+journeys_path = root / "docs/critical-journeys/journeys.json"
+journeys = json.loads(journeys_path.read_text()).get("journeys")
+if not isinstance(journeys, list) or not journeys:
+    fail("critical journey inventory is non-empty", str(journeys_path), "add a consumer-visible journey")
+for journey in journeys:
+    if not journey.get("observableOutcome") or not journey.get("verification") or not journey.get("limitations"):
+        fail("critical journey has oracle, verification, and limitations", journey.get("id", "unknown"), "complete the journey record")
+
+receipt_path = root / "repo-structure.render.json"
+receipt = json.loads(receipt_path.read_text())
+if not receipt.get("officialSources") or not receipt.get("selectedVersions") or not receipt.get("compatibilityDecisions"):
+    fail("render receipt has provenance and compatibility decisions", str(receipt_path), "rerender from a qualified snapshot")
+if any(item.get("status") != "qualified" for item in receipt["compatibilityDecisions"]):
+    fail("all selected compatibility decisions are qualified", str(receipt_path), "qualify or reject the provisional selection")
+for relative, expected in receipt.get("configDigests", {}).items():
+    target = root / relative
+    observed = hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() else None
+    if observed != expected:
+        fail("rendered config digest matches", relative, "rerender or explicitly adopt the config change")
+lockfile = receipt.get("lockfile", {})
+if receipt.get("phase") == "bootstrapped":
+    target = root / lockfile.get("path", "bun.lock")
+    if not target.is_file() or hashlib.sha256(target.read_bytes()).hexdigest() != lockfile.get("sha256"):
+        fail("bootstrapped lockfile digest matches", str(target), "regenerate and finalize the receipt")
+elif lockfile.get("status") != "not-generated" or lockfile.get("sha256") is not None:
+    fail("rendered phase does not imply a lockfile", str(receipt_path), "record not-generated or finalize after bun install")
+if not receipt.get("limitations") or not receipt.get("nonClaims"):
+    fail("render receipt states limitations and non-claims", str(receipt_path), "add explicit limitations and nonClaims")
+
+receipt_fields = {"schemaVersion","status","invariant","target","captureLimitBytes","capturedBytes","truncated","excerpt","details","recovery","postcondition","limitations","nonClaims"}
+for bounded_path in (root / "docs").rglob("*.receipt.json"):
+    bounded = json.loads(bounded_path.read_text())
+    if not receipt_fields.issubset(bounded):
+        fail("command receipt is bounded and complete", str(bounded_path), "add capture bounds, detail identity, recovery, postcondition, limitations, and nonClaims")
+    if bounded["capturedBytes"] > bounded["captureLimitBytes"] or len(bounded["excerpt"].encode()) > bounded["captureLimitBytes"]:
+        fail("command receipt respects capture limit", str(bounded_path), "truncate the excerpt and retain full detail by path/digest")
+    details = bounded.get("details")
+    if not isinstance(details, dict) or set(details) != {"path", "sha256"}:
+        fail("command receipt identifies omitted detail", str(bounded_path), "record detail path and sha256, using null only when no detail exists")
+    if not bounded["nonClaims"]:
+        fail("command receipt states non-claims", str(bounded_path), "add at least one explicit non-claim")
+
+link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+for markdown in (root / "docs").rglob("*.md"):
+    for raw in link_pattern.findall(markdown.read_text()):
+        if raw.startswith(("http://", "https://", "#")):
+            continue
+        relative = raw.split("#", 1)[0]
+        if not relative:
+            continue
+        target = (markdown.parent / relative).resolve()
+        if (root not in target.parents and target != root) or not target.exists():
+            fail("local documentation link resolves", f"{markdown.relative_to(root)} -> {raw}", "repair or retire the link")
+
+print(json.dumps({"status":"passed","invariant":"repository governance owners and receipts are coherent","target":str(root),"recovery":"none","details":None,"postcondition":"owners, links, journeys, controls, and render receipt validated","nonClaims":["This does not prove installed dependencies, build output, or provider state."]}))

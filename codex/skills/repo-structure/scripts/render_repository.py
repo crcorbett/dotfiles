@@ -66,6 +66,10 @@ def copy_assets(stage: Path, replacements: dict[str, str]) -> None:
         output.write_text(text)
 
 
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def install_skill_baseline(stage: Path, skills_root: Path) -> None:
     destination = stage / ".agents/skills"
     for name in ("prd-writer", "prd-review", "prd-implementer", "effect-client-wrapper"):
@@ -100,7 +104,18 @@ def main() -> None:
     package_skill = resolve_skill(skills_root, "package-structure")
     versions_path = Path(args.versions).resolve(strict=True)
     versions = json.loads(versions_path.read_text())
+    if not isinstance(versions.get("sources"), dict) or not versions["sources"]:
+        raise ValueError("version snapshot requires official sources")
+    decisions = versions.get("compatibilityDecisions")
+    if not isinstance(decisions, list) or {item.get("id") for item in decisions} != {
+        "effect-ecosystem", "tanstack-start", "alchemy-cloudflare"
+    }:
+        raise ValueError("version snapshot requires Effect, TanStack, and Alchemy compatibility decisions")
+    if any(item.get("status") != "qualified" for item in decisions):
+        raise ValueError("renderer accepts only qualified compatibility decisions")
     packages = versions["packages"]
+    if any(not isinstance(value, str) or value.lower() == "latest" for value in packages.values()):
+        raise ValueError("version snapshot requires exact selected versions, never latest")
     effect_versions = {packages[name] for name in ("effect", "@effect/platform-bun", "@effect/platform-node", "@effect/vitest")}
     if len(effect_versions) != 1:
         raise ValueError("Effect ecosystem versions must match exactly")
@@ -126,13 +141,39 @@ def main() -> None:
             )
             package_renderer.render(namespace)
         manifest = {
+            "schemaVersion": 1,
+            "phase": "rendered",
             "name": args.name,
             "scope": args.scope,
             "sourceCondition": args.source_condition,
             "versionSnapshot": {
                 "resolvedAt": versions["resolvedAt"],
-                "sha256": hashlib.sha256(versions_path.read_bytes()).hexdigest(),
+                "sha256": sha256(versions_path),
             },
+            "officialSources": versions["sources"],
+            "selectedVersions": packages,
+            "compatibilityDecisions": decisions,
+            "configDigests": {
+                path: sha256(stage / path)
+                for path in (
+                    "package.json", "tsconfig.base.json", "tsconfig.infrastructure.json", "turbo.json",
+                    "oxlint.config.ts", "oxfmt.config.ts", "vitest.config.ts",
+                    "knip.ts", "alchemy.run.ts",
+                )
+            },
+            "lockfile": {
+                "path": "bun.lock",
+                "sha256": None,
+                "status": "not-generated",
+                "owner": "bun install",
+            },
+            "limitations": [
+                "Rendering proves template structure only; install, typecheck, tests, build, and provider behavior require separate receipts."
+            ],
+            "nonClaims": [
+                "Selected versions are not claimed to remain latest.",
+                "No Cloudflare resource was planned, deployed, or read back.",
+            ],
         }
         (stage / "repo-structure.render.json").write_text(json.dumps(manifest, indent=2) + "\n")
         subprocess.run(
