@@ -23,6 +23,12 @@ without duplicating truth.
    candidate with provenance, freshness, audience, proposed owner, target
    revision, limitations, and non-claims.
 
+Curator output must use an explicit candidate block containing source,
+provenance, freshness, classification, audience, evidence, proposed owner,
+target revision, reviewer, publisher, publication status, quarantine/revocation,
+last-known-good recovery, and readback. Mark unknown fields with their owner and
+resume trigger; never omit them.
+
 ## Reconcile the change
 
 For each affected surface, record `Change required`, `Preserve`, or justified

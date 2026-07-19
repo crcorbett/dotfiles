@@ -109,6 +109,12 @@ SPEC/tasks. Never accept a generic “update docs” item.
   retrieval path until a responsible reviewer accepts it and a separately
   identified publisher performs an atomic publication with readback.
 
+A curator result is incomplete unless it returns an explicit `candidate` block
+with every field above plus responsible reviewer, publisher identity,
+publication status, revocation/quarantine, last-known-good recovery, and
+post-publication readback. Use `unknown` with a named owner/resume trigger when
+evidence cannot supply a field; never silently omit it.
+
 ## Keep implementation and documentation honest
 
 - Confirm claims against current code, config, and runtime evidence at the
