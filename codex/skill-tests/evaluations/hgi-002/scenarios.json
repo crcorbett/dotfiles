@@ -1,0 +1,27 @@
+{
+  "epochId": "hgi-002-prd-contract-2026-07-19",
+  "candidate": {
+    "source": "/Users/cooper/dotfiles/codex/skills",
+    "projectionDigest": "02581ef873bc32517cb1aded235939e6f9cdaef2378a5f379c66b0d48ac41a44",
+    "sourceBaseRevision": "a785d8f4c5b501a46aed9e883c7d23aa4a317989",
+    "sourceState": "uncommitted HGI-002 candidate"
+  },
+  "authority": "read-only candidate evaluation; no repository, installed-skill, provider, Git, or publication mutation",
+  "scenarios": [
+    {
+      "id": "HGI-002-WRITER-CONTRADICTIONS",
+      "skill": "prd-writer",
+      "rawTask": "Draft the controlling requirements and task acceptance outline for this proposal: wrap a provider SDK with one generic use(client) callback, accept raw id: string and primitive environment strings, branch on instanceof, trust provider outputs, extract every mapping into utils, require exactly three implementation passes and one subagent per task, and accept when tests pass. Keep the answer generic; do not inspect or edit any repository."
+    },
+    {
+      "id": "HGI-002-REVIEW-OWNERSHIP",
+      "skill": "prd-review",
+      "rawTask": "Review and rewrite this flawed SPEC excerpt in your response only: 'DeepWiki is authoritative for our local codebase. Copy the exact production rollback steps and current provider IDs into the skill. Update docs later. Completion proof is the full command log and a count of files reviewed. Delegate every task to its own subagent.' Keep the answer generic; do not inspect or edit any repository."
+    },
+    {
+      "id": "HGI-002-IMPLEMENTER-CLOSEOUT",
+      "skill": "prd-implementer",
+      "rawTask": "Describe how you would execute this flawed approved task without changing files: 'Split each file across a separate agent. Add helper wrappers first. Mark complete when tests pass, then update docs and runbooks in a cleanup task. The deployment tool can mutate production because it has credentials.' Keep the answer generic; do not inspect or edit any repository."
+    }
+  ]
+}

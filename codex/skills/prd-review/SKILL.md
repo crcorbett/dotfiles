@@ -58,6 +58,13 @@ Across the three phases also inspect:
 
 Track the file count and which files were read. Call out generated, binary, vendored, inaccessible, or irrelevant exclusions rather than silently skipping them. Re-read the SPEC after the documentation pass. Follow repository-local instructions over generic preferences.
 
+Treat context as layered. External systems own live external state, repository
+docs own durable repository truth, and the active SPEC/tasks own only the
+current change. Inventory the full readable docs/README corpus for impact
+accounting, but deeply load current, canonical, affected, and contradictory
+owners just in time. Relevance-route history and raw evidence instead of
+preloading or rewriting it as current guidance.
+
 ## Research upstream libraries with DeepWiki
 
 Use the Executor MCP's `deepwiki_mcp` integration to research third-party packages and libraries implicated by the SPEC, such as Effect, effect-smol, React, framework packages, or lint and build tooling. Do not use DeepWiki to analyze the current codebase; derive local architecture and conventions from the current checkout, its documentation, and its configuration.
@@ -86,6 +93,37 @@ Create an evidence map from each material SPEC requirement to supporting documen
 
 Remove vague instructions such as "handle errors," "add tests," or "follow existing patterns." Replace them with named patterns, failure cases, owners, and observable outcomes.
 
+## Review the harness contract
+
+For material work, edit the SPEC/tasks to cover every applicable lens:
+
+- skills teach judgment and routing; runbooks own repeatable procedures,
+  preconditions, authority, steps, bounded evidence, rollback, and escalation;
+- tool output identifies the violated invariant, exact target, recovery hint,
+  omitted-detail path, and postcondition instead of emitting unbounded logs;
+- proof identifies the artifact, boundary or critical journey, actor,
+  environment, evidence, limitations, non-claims, and release identity;
+- authority records principal, identity source, operation, resource,
+  environment, duration, approval, revocation, audit receipt, rollback, and
+  escalation separately from capability;
+- repeated findings move to the earliest durable schema, type, lint rule, test,
+  generator, runbook, or canonical document, with weaker reminders retired;
+- continuous automation is admitted only for settled work with a signal,
+  durable state, sufficient authority, convergence, per-run proof, bounded
+  failure, stopping, and escalation;
+- the evaluation epoch records model/worker, host, tools, runtime, skills,
+  target, authority, scenario, grader, accepted outcome, baseline,
+  disconfirming result, and the four distinct timing clocks;
+- each repository maintains a small consumer-visible journey inventory with an
+  owner and oracle against plausible imitation; and
+- failed, blocked, deferred, superseded, inconclusive, and no-op work retains
+  provenance, observed state, limitations, successor/tombstone, escalation, and
+  recovery outside the default context route.
+
+Use these as named risk/evidence lenses, not a fixed review ritual. Reject
+three-pass rules, one-subagent-per-task rules, file-count acceptance, or any
+activity quota presented as proof.
+
 ## Cover every downstream artifact
 
 Perform an explicit impact pass and add required changes to the SPEC and tasks for each affected repository-owned surface:
@@ -96,9 +134,15 @@ Perform an explicit impact pass and add required changes to the SPEC and tasks f
 - **Skills and agent instructions:** applicable `SKILL.md` files, `agents/openai.yaml`, references, scripts, templates, examples, and repository-owned agent or command instructions. Keep skill metadata synchronized and require the relevant skill validator after changes.
 - **Adjacent artifacts:** manifests, lockfiles, generators, templates, fixtures, Schemas, sample configuration, environment documentation, migrations, telemetry, dashboards, release notes, and rollout or rollback procedures.
 
-For every surface, mark it `Change required` or `N/A` with repository evidence. For each required change, name the exact file or narrowly bounded file set, the content or rule to change, its dependency/order, its acceptance criterion, and the command or inspection that proves completion. Do not add generic tasks such as "update docs," "fix lint," or "update skills."
+For every surface, mark it `Change required`, `Preserve`, or `N/A` with repository evidence. For each required change, name the exact file or narrowly bounded file set, the content or rule to change, its dependency/order, its acceptance criterion, and the command or inspection that proves completion. Do not add generic tasks such as "update docs," "fix lint," or "update skills."
 
 Prefer updating the canonical source and its necessary pointers over duplicating the same guidance across files. Treat user-global skills or artifacts outside the repository as out of scope unless the user explicitly includes them.
+
+When a repository-local `docs-maintainer` profile exists, invoke its owner map
+and exact checks during grounding and landing. The global review method never
+invents local commands, provider state, archive rules, mirrors, or exceptions.
+Require documentation owners and pointers to be edited during the owning
+implementation slice rather than deferred to closeout.
 
 ## Apply improvements to the SPEC and tasks
 
@@ -199,5 +243,10 @@ Finish with a concise report containing:
 - local repository evidence and upstream-library evidence reconciled, including version mismatches or contradictions;
 - unresolved product decisions or blockers;
 - validation performed and any remaining gaps.
+
+Keep tool output and the final handoff bounded. For each claimed result, retain
+an addressable receipt with target, command or procedure owner, postcondition,
+artifact digest where applicable, limitations, recovery, and explicit
+non-claims. Preserve raw failed evidence outside the default route.
 
 Use file-and-line references for actionable findings. Do not claim the SPEC is implementation-ready while mandatory evidence, unresolved contradictions, or non-negotiable decisions remain.

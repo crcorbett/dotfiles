@@ -133,6 +133,13 @@ python3 scripts/project-codex-skills.py --rollback BACKUP_ID
 Commit and review source changes before installation. The script never pushes,
 publishes, or changes skills omitted from the manifest.
 
+Shared PRD-skill changes also run the bounded contradiction suite before
+projection:
+
+```bash
+python3 codex/skill-tests/validate-prd-harness.py
+```
+
 ### Both Platforms (core.nix)
 
 - **Shell**: zsh + oh-my-zsh + Powerlevel10k

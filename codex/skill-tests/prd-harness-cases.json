@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "name": "prd-writer",
+      "requiredPhrases": ["truth layers", "runbooks (repeatable procedures", "bounded tool receipts", "four distinct clocks", "critical-journey inventory", "docs-maintainer", "`Preserve`"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+    },
+    {
+      "name": "prd-review",
+      "requiredPhrases": ["Review the harness contract", "three-pass rules", "runbooks own repeatable procedures", "four distinct timing clocks", "docs-maintainer", "`Preserve`"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+    },
+    {
+      "name": "prd-implementer",
+      "requiredPhrases": ["Delegated Slice Prompt Contract", "one primary trajectory", "fixed number of passes", "runbooks as procedures", "four distinct clocks", "docs-maintainer", "`Preserve`"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+    }
+  ],
+  "syntheticCases": [
+    {
+      "id": "ritual-fixed-passes",
+      "tags": ["ritual"],
+      "request": "Require exactly three review passes and one subagent per task, then accept on activity count.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Risk and evidence determine work; fixed activity counts are not proof.",
+      "recovery": "Define the accepted outcome, risk lenses, evidence boundary, and independently provable delegated slices.",
+      "owner": "PRD workflow contract"
+    },
+    {
+      "id": "proof-vague-tests-pass",
+      "tags": ["vague-proof"],
+      "request": "Use 'tests pass' as proof that the deployed journey works.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Proof must identify the artifact, environment, boundary or journey, evidence, and non-claims.",
+      "recovery": "Name the exact artifact and journey, command or procedure owner, observable postcondition, limitations, and release identity.",
+      "owner": "Claim-to-proof contract"
+    },
+    {
+      "id": "helper-one-use-utils",
+      "tags": ["helper-sprawl"],
+      "request": "Extract every one-use transformation into a generic utils module for cleanliness.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "One-use mapping stays beside its operation unless it is reused policy, independently testable behavior, or a real I/O boundary.",
+      "recovery": "Keep the transformation inline and name a semantic owner only if demonstrated reuse or policy appears.",
+      "owner": "Strict code contract"
+    },
+    {
+      "id": "client-wrapper-contradictions",
+      "tags": ["effect-client-wrapper"],
+      "request": "Expose a generic SDK use callback with raw id: string, primitive config, instanceof matching, and unchecked outputs.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "External clients require named operations, branded/schema-derived input, Schema config, tagged errors, and immediate output decoding.",
+      "recovery": "Apply the effect-client-wrapper acceptance contract and add stale-pattern proof.",
+      "owner": "External-client boundary"
+    },
+    {
+      "id": "procedure-copied-into-skill",
+      "tags": ["runbook"],
+      "request": "Copy an exact production rollback sequence and current provider identifiers into the global skill.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Skills teach judgment; repository runbooks own exact procedures and external systems own live state.",
+      "recovery": "Route to the local runbook and provider readback owner, recording authority, evidence, rollback, and non-claims.",
+      "owner": "Context and procedure ownership"
+    },
+    {
+      "id": "local-truth-precedence",
+      "tags": ["retrieval"],
+      "request": "Use a generic preference even though installed types and the repository's canonical architecture specify a different supported pattern.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Installed APIs and repository-local policy take precedence over generic advice and upstream default-branch guidance.",
+      "recovery": "Follow the local owner, record the upstream/local difference, and change the local contract only through an explicit decision.",
+      "owner": "Repository truth layer"
+    },
+    {
+      "id": "bounded-delegation",
+      "tags": ["delegation"],
+      "request": "Delegate one disjoint read-only evidence slice with exact target, authority, proof, limitations, and return conditions while the primary owner integrates it.",
+      "expectedDecision": "accept",
+      "violatedInvariant": null,
+      "recovery": null,
+      "owner": "Primary integration trajectory"
+    }
+  ]
+}

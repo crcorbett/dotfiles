@@ -14,6 +14,11 @@ Write the smallest canonical SPEC and task set that lets an implementer proceed 
 3. Treat repository files and installed types as authoritative. Preserve unrelated work.
 4. Use DeepWiki through Executor MCP only for upstream packages or libraries such as Effect, effect-smol, React, TanStack, or build tooling. Never use it to inspect the local codebase. Reconcile upstream advice with the installed version and local conventions.
 
+Load context just in time. External systems remain authoritative for their live
+state; repository docs own durable repository truth; the active SPEC/tasks own
+only the current change. Link between layers instead of copying provider state,
+architecture, procedures, proof, or task history into a second owner.
+
 ## Write the contract
 
 Define goals, non-goals, current state, target ownership, call graphs, data and error contracts, security, accessibility, operations, rollout, rollback, and independently observable acceptance criteria as applicable. Replace phrases such as "follow existing patterns", "handle errors", or "add tests" with named owners, failure cases, files, and proof.
@@ -26,6 +31,39 @@ For a substantial SPEC, record a job contract containing:
 - a claim-to-proof mapping at the real boundary;
 - the maintenance owner and expected carrying cost; and
 - evidence that would weaken, revise, or retire the proposed intervention.
+
+Add an applicability-driven harness contract for every material repository,
+operational, automation, or cross-cutting change:
+
+- identify truth layers, semantic owners, context routes, freshness, and what
+  must remain a link rather than duplicated prose;
+- separate skills (judgment and routing), runbooks (repeatable procedures with
+  preconditions, authority, steps, evidence, rollback, and escalation),
+  architecture, active tasks, proof, generated reference, and historical
+  evidence;
+- require bounded tool receipts that name the violated invariant, exact target,
+  recovery hint, omitted-detail path, and observed postcondition;
+- map every claim to an identifiable artifact, exact boundary or critical
+  journey, evidence, limitations, non-claims, and release identity;
+- record principal, identity source, operation, resource, environment,
+  duration, approval, revocation, audit receipt, rollback, and escalation for
+  consequential authority;
+- promote repeated findings to the earliest durable schema, type, lint rule,
+  test, generator, runbook, or canonical document and retire weaker reminders;
+- admit continuous automation only for settled work with an observable signal,
+  durable state, sufficient authority, convergence/idempotence, proof on every
+  run, bounded failure, stopping, and escalation;
+- name the worker/host/tool/runtime/skill evaluation epoch, accepted outcome,
+  baseline, smallest intervention, disconfirming result, and the four distinct
+  clocks: worker duration, feedback latency, synchronous human attention, and
+  time to accepted outcome;
+- maintain a small consumer-visible critical-journey inventory with a procedure
+  owner and oracle against plausible imitation; and
+- preserve failed, blocked, deferred, superseded, and inconclusive work with
+  provenance and successor/tombstone outside the default context route.
+
+Apply only the relevant lenses, but record `N/A` with evidence. Never use a
+fixed pass count, file count, subagent count, or activity volume as proof.
 
 For Effect work, require the locally supported APIs and these invariants:
 
@@ -43,13 +81,20 @@ For React work, place data loading, Effect execution, and shared orchestration a
 
 ## Record every impact
 
-Add an impact ledger in the SPEC and task list. Mark each surface `Change required` or `N/A` with path evidence:
+Add an impact ledger in the SPEC and task list. Mark each surface `Change required`, `Preserve`, or `N/A` with path evidence:
 
 - canonical product, architecture, API, operational, migration, and index documentation;
 - root, app, and package READMEs;
 - lint, formatter, TypeScript, custom rules and fixtures, package scripts, and CI;
 - repository-owned skills, `AGENTS.md`, skill metadata, references, scripts, and templates;
 - manifests, configuration, Schemas, migrations, generators, fixtures, tests, observability, release, rollout, and rollback artifacts.
+
+Route documentation maintenance through the repository's local
+`docs-maintainer` profile when it exists. The global method may require owner,
+class, impact, lifecycle, proof, and non-claims; only the repository may supply
+exact commands, current provider facts, archive policy, mirror rules, or local
+exceptions. A SPEC must require owning docs and necessary pointers to change in
+the same implementation slice, not as final cleanup.
 
 For every required change, name the exact path or narrow path set, dependency order, acceptance criterion, and real repository command or inspection that proves it. Never invent command names.
 
@@ -60,6 +105,10 @@ For every required change, name the exact path or narrow path set, dependency or
 - Put the relevant Effect, wrapper, helper-sprawl, React, documentation, lint, and skill acceptance rules inside every affected task rather than relying on one global reminder.
 - Require targeted tests and the repository's actual formatting, lint, typecheck, build, runtime, browser, and skill-validation commands.
 - Require implementation discoveries to update the SPEC, tasks, diagrams, docs, READMEs, and enforcement before the task can pass.
+- Require each command/manual/provider/fresh-context check to name repository,
+  cwd, invocation or procedure owner, expected postcondition, authority,
+  applicability, receipt path, outcome, limitations, and non-claims. Raw logs
+  alone are not completion proof.
 - Remove or merge stale, duplicated, contradictory, and superseded tasks.
 - Record unresolved product decisions as explicit blockers and decision tasks.
 

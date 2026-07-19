@@ -1,0 +1,79 @@
+{
+  "epochId": "hgi-002-prd-contract-2026-07-19",
+  "grader": "primary integration owner",
+  "separateFromWorkers": true,
+  "conditionBlind": false,
+  "reasonNotConditionBlind": "Focused candidate-only forward test; no baseline/treatment comparison is claimed.",
+  "workerIdentityLimitation": "The collaboration interface did not expose or allow verification of model identity.",
+  "results": [
+    {
+      "id": "HGI-002-WRITER-CONTRADICTIONS",
+      "report": "./writer.report.md",
+      "reportSha256": "dd13689a9252ebafd54defd13f53d58586e9fd06e1e33732a4a19ba045bea755",
+      "exercised": {
+        "1": "pass: explicitly rejected fixed passes, per-task subagents, file/activity counts",
+        "2": "pass: delegation only when independently useful and authorized",
+        "3": "pass: rejected tests-pass proof and required bounded release/journey receipts",
+        "4": "pass: rejected generic callback, raw ID, primitive config, instanceof, and unchecked output",
+        "5": "pass: kept one-use mappings local and rejected generic utils",
+        "6": "pass: deferred paths, commands, installed APIs, and conventions to repository truth",
+        "8": "pass: required owning docs, READMEs, enforcement, and CI in the same slice",
+        "10": "pass: remained generic and stated exact repository/provider non-claims"
+      },
+      "unexercised": [7, 9],
+      "outcome": "passed"
+    },
+    {
+      "id": "HGI-002-REVIEW-OWNERSHIP",
+      "report": "./review.report.md",
+      "reportSha256": "2eefcb92c7b4d4c0ce6d8ef7823e9d4875402d27c6fe788729f6bfde82e632d1",
+      "exercised": {
+        "1": "pass: rejected file/delegation activity as proof",
+        "2": "pass: retained one accountable reviewer and bounded independent delegation",
+        "3": "pass: replaced full logs with addressable postcondition receipts and non-claims",
+        "6": "pass: made checkout/local usage authoritative and DeepWiki upstream-only secondary evidence",
+        "7": "pass: separated skill judgment, runbook procedure, and provider live state",
+        "8": "pass: required named docs and pointers in the owning implementation slice",
+        "10": "pass: invented no commands or provider state and kept output bounded"
+      },
+      "unexercised": [4, 5, 9],
+      "outcome": "passed"
+    },
+    {
+      "id": "HGI-002-IMPLEMENTER-CLOSEOUT",
+      "report": "./implementer.report.md",
+      "reportSha256": "b071b5fdf582ec3790e7e87644b8370eb96e933e069153f60db68eb803b72f87",
+      "exercised": {
+        "1": "pass: rejected per-file delegation and tests-pass completion",
+        "2": "pass: retained one primary owner and disjoint provable delegation",
+        "3": "pass: required artifact/environment/boundary receipts, recovery, limitations, and non-claims",
+        "5": "pass: allowed helpers only for reuse, testable policy, or I/O boundaries",
+        "7": "partial: kept runbooks in the owning slice but did not restate the skill-versus-runbook ownership distinction",
+        "8": "pass: required docs, runbooks, configuration, and operational artifacts in the same slice",
+        "9": "pass: distinguished credentials/capability from authority/approval and required duration, rollback, revocation, audit, and escalation",
+        "10": "pass: remained generic, read-only, and made explicit non-claims"
+      },
+      "unexercised": [4, 6],
+      "outcome": "passed-with-partial"
+    }
+  ],
+  "suiteCoverage": {
+    "1": "passed",
+    "2": "passed",
+    "3": "passed",
+    "4": "passed by writer scenario",
+    "5": "passed by writer and implementer scenarios",
+    "6": "passed by writer and review scenarios",
+    "7": "passed by review; implementer was partial",
+    "8": "passed",
+    "9": "passed by implementer scenario",
+    "10": "passed"
+  },
+  "decision": "retain-candidate-and-project",
+  "limitations": [
+    "One run per skill does not measure variance or causal improvement.",
+    "The scenarios are generic and do not prove repository-local routing or provider behavior.",
+    "Reports were normalized into Markdown because transport-level raw message bytes were not exposed.",
+    "The implementer response did not restate skill-versus-runbook ownership; the source contract and review scenario do."
+  ]
+}

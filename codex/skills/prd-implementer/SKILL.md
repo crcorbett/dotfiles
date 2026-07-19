@@ -13,7 +13,12 @@ Implement the canonical SPEC as a sequence of accepted end-to-end slices. Keep c
 2. Preserve unrelated changes. Confirm task dependencies and current completion evidence before editing.
 3. Use DeepWiki through Executor MCP only for upstream libraries. Verify any guidance against the installed version and local types; never use DeepWiki as a substitute for reading the checkout.
 
-## Execute sequentially
+Load context in layers: external systems own live external state, repository
+docs own durable repository truth, and the active SPEC/tasks own the current
+change. Pull current and affected owners just in time; link to history, raw
+proof, and provider truth instead of copying them into the active context.
+
+## Delegated Slice Prompt Contract
 
 Keep one primary trajectory accountable for integration, proof, delivery, and
 closeout. Delegate a bounded task only when it has an independently provable
@@ -23,6 +28,15 @@ same agent before acceptance. Do not use one-subagent-per-task or a fixed number
 of audit passes as acceptance proof. Parallelize only when dependencies and
 write scopes are explicitly disjoint.
 
+Every delegated slice states the accepted outcome, exact target revision and
+paths, applicable repository instructions, authority and stop conditions,
+document/runbook/proof impact, commands or procedure owners, required receipt,
+limitations, non-claims, and return-to-owner condition. The primary trajectory
+reviews the evidence and owns merge, cross-surface reconciliation, rollback,
+and task closure.
+
+## Execute sequentially
+
 For each task:
 
 1. Re-state its owning paths, dependencies, acceptance criteria, and verification.
@@ -31,6 +45,10 @@ For each task:
 4. Audit the diff for architecture, helper sprawl, boundary provenance, React composition, and enforcement.
 5. Run the narrow proof first and broaden according to blast radius.
 6. Record evidence and mark completion only when every required surface passes.
+
+Do not preserve a fixed number of passes, subagents, files, or commands as a
+process goal. Risk, dependencies, accepted outcomes, and evidence determine the
+slice and verification depth.
 
 ## Effect implementation bar
 
@@ -58,3 +76,31 @@ For an external SDK, invoke the `effect-client-wrapper` contract. Reject generic
 Before accepting a task, resolve every SPEC impact-ledger row for docs, READMEs, lint/custom rules and fixtures, CI, skills and agent instructions, configuration/manifests, Schemas/migrations/generators, tests/fixtures, observability, release, rollout, and rollback. A required surface cannot be deferred with a vague follow-up.
 
 Use only commands that exist in the repository. Validate changed skills with the available skill validator. Distinguish pre-existing failures from regressions, and finish with changed paths, commands and outcomes, updated task status, and residual risks.
+
+For material tasks, also reconcile the complete harness contract:
+
+- respect truth layers and semantic owners; update the earliest durable owner
+  and remove weaker duplicated reminders;
+- keep skills as judgment/routing and runbooks as procedures with preconditions,
+  authority, exact steps, bounded evidence, rollback, and escalation;
+- emit bounded receipts with invariant, target, recovery, omitted-detail path,
+  postcondition, artifact identity, limitations, and non-claims;
+- match proof to the actual artifact, environment, boundary, and small
+  consumer-visible critical journeys with an oracle against imitation;
+- distinguish capability, authenticated identity, authority, and approval, and
+  record revocation, duration, audit receipt, rollback, and escalation for
+  consequential operations;
+- admit automation only when signal, durable state, authority,
+  idempotence/convergence, per-run proof, bounded failure, stopping, and
+  escalation are settled;
+- preserve the worker/host/tool/runtime/skill epoch and the four distinct
+  clocks when evaluation claims depend on them; and
+- retain failed, blocked, deferred, superseded, inconclusive, and no-op evidence
+  with provenance, successor/tombstone, recovery, and explicit non-claims
+  outside the default context route.
+
+Invoke the repository-local `docs-maintainer` profile when present. It owns the
+local document map, exact checks, archive and mirror rules, runbooks, and
+exceptions; this global skill must not invent them. Update owning docs and
+necessary pointers inside the implementation slice. Mark every impact-ledger
+surface `Change required`, `Preserve`, or `N/A` with evidence before closure.
