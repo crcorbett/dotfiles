@@ -18,16 +18,31 @@
       "purpose": "label, measure, represent, or highlight",
       "necessity": "What would a reader lose without colour, beyond an already available direct label, position, or line weight?",
       "semantic_rationale": "Why this hue does not falsely imply a status such as danger, gain, loss, or category membership.",
+      "ordering": {
+        "kind": "none, nominal, ordered, or sequential",
+        "data_order": "not applicable, or ascending, descending, or chronological",
+        "domain": null,
+        "palette": null,
+        "visual_progression": "not applicable, or light-to-dark, dark-to-light, low-to-high, or high-to-low"
+      },
       "neutral_default": "Which non-focus marks remain neutral?",
       "accent_focus": "Which question-relevant reference, exception, or selected series earns accent colour?"
     }
   },
   "scales": {
-    "y": { "baseline": 0, "domain_rationale": "..." }
+    "y": { "baseline": 0, "domain_rationale": "..." },
+    "discontinuity": {
+      "used": false,
+      "axis": null,
+      "omitted_range": null,
+      "visible_marker": null,
+      "label": null,
+      "alternative_considered": "aligned view, annotation, detail panel, or not applicable"
+    }
   },
   "form_choice": {
     "task_function": "comparison, trend over time, distribution, correlation, part-to-whole, geolocation, concept visualisation, or another stated task",
-    "candidate_catalogue": "Data Viz Project taxonomy, direct domain practice, or both",
+    "candidate_catalogue": "embedded task taxonomy, direct domain practice, or both",
     "candidate_forms": [
       { "form": "ordered dot plot", "fit": "High: supports the named common-scale ranking comparison." },
       { "form": "table-graphic", "fit": "Considered for exact lookup; loses if the primary task is rapid rank comparison." }
@@ -45,6 +60,28 @@
     "design_invariance": "Which design choices remain constant across observations, and any justified exception.",
     "visual_effect_ratio": null,
     "effect_ratio_note": "Use a measured ratio when a graphical effect can be compared directly with the data effect; otherwise explain why it is not applicable."
+  },
+  "mark_economy": {
+    "erasability": [
+      { "layer": "quiet gridlines", "role": "guide", "reading_lost": "Readers cannot interpolate values reliably at the intended size." },
+      { "layer": "direct labels", "role": "access", "reading_lost": "Exact identity or value lookup would require a distant legend or tooltip." }
+    ],
+    "data_ink": {
+      "ratio": null,
+      "method": "not-applicable, manual-vector-measurement, or estimated-pixel-area",
+      "basis": "Measure only when data and non-data geometry are meaningfully separable; otherwise explain why a ratio would be false precision.",
+      "data_measure": null,
+      "total_measure": null,
+      "data_geometry": "marks whose position, length, area, or other visual measure encodes observations; or not applicable",
+      "non_data_geometry": "guides, labels, annotations, containers, and other non-data layers; or not applicable"
+    }
+  },
+  "spatial_narrative": {
+    "applicable": false,
+    "evidence_relation": "not applicable, or the route, connection, relative location, exposure, or sequence the reader must recover",
+    "preserved_by": "not applicable, or the coordinate/mark/facet/linked view that preserves the relation",
+    "lost_dimension": "none, or the material spatial/temporal dimension sacrificed",
+    "alternative_view": "not applicable, or the table, timeline, local detail, or aligned comparison provided; never use a placeholder when applicable is true"
   },
   "comparison": {
     "eyespan": true,

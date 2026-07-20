@@ -31,15 +31,55 @@ BASE = {
     "data": {"denominator": "eligible sessions"},
     "mark": "line",
     "encoding": {"y": {"field": "completion_rate", "unit": "%"}},
-    "scales": {"y": {"baseline": 0}},
+    "scales": {
+        "y": {"baseline": 0},
+        "discontinuity": {
+            "used": False,
+            "axis": None,
+            "omitted_range": None,
+            "visible_marker": None,
+            "label": None,
+            "alternative_considered": "not applicable",
+        },
+    },
     "integrity": {
         "design_invariance": "One shared y scale and identical mark construction for every week.",
         "visual_effect_ratio": 1.0,
     },
+    "mark_economy": {
+        "erasability": [
+            {
+                "layer": "quiet grid",
+                "role": "guide",
+                "reading_lost": "Readers cannot interpolate rates reliably at the intended size.",
+            },
+            {
+                "layer": "release rule",
+                "role": "annotation",
+                "reading_lost": "The release event lacks its precise temporal context.",
+            },
+        ],
+        "data_ink": {
+            "ratio": None,
+            "method": "not-applicable",
+            "basis": "Raster output does not allow a meaningful separation of data and non-data ink.",
+            "data_measure": None,
+            "total_measure": None,
+            "data_geometry": "Weekly line and points.",
+            "non_data_geometry": "Grid, release rule, labels, and source text.",
+        },
+    },
+    "spatial_narrative": {
+        "applicable": False,
+        "evidence_relation": "not applicable",
+        "preserved_by": "not applicable",
+        "lost_dimension": "none",
+        "alternative_view": "not applicable",
+    },
     "comparison": {"eyespan": True, "alternative_view": "none needed"},
     "form_choice": {
         "task_function": "trend over time",
-        "candidate_catalogue": "Data Viz Project taxonomy",
+        "candidate_catalogue": "embedded task taxonomy",
         "candidate_forms": [
             {"form": "line chart", "fit": "Keeps the regular weekly sequence visible."},
             {"form": "table", "fit": "Supports lookup but weakens change detection."},
@@ -115,6 +155,95 @@ def main() -> int:
     failing = run(colour_without_semantics)
     assert failing.returncode == 1, failing.stdout + failing.stderr
     assert "colour encoding needs a semantic rationale" in failing.stdout
+
+    missing_erasability = {
+        **BASE,
+        "mark_economy": {
+            "erasability": [],
+            "data_ink": {
+                "ratio": None,
+                "method": "not-applicable",
+                "basis": "not measurable",
+                "data_measure": None,
+                "total_measure": None,
+                "data_geometry": "marks",
+                "non_data_geometry": "guides",
+            },
+        },
+    }
+    failing = run(missing_erasability)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "mark_economy.erasability needs one structured entry" in failing.stdout
+
+    hidden_scale_break = {
+        **BASE,
+        "scales": {**BASE["scales"], "discontinuity": {"used": True}},
+    }
+    failing = run(hidden_scale_break)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "scale discontinuity needs a two-value scales.discontinuity.omitted_range" in failing.stdout
+
+    invalid_colour_order = {
+        **BASE,
+        "encoding": {
+            **BASE["encoding"],
+            "colour": {
+                "field": "month",
+                "purpose": "measure",
+                "necessity": "Month order needs an additional visual cue.",
+                "semantic_rationale": "The treatment encodes time, not status.",
+                "ordering": {"kind": "sequential", "data_order": "whatever", "domain": ["Jan", "Feb"], "palette": ["#ffffff", "#000000"], "visual_progression": "any"},
+            },
+        },
+    }
+    failing = run(invalid_colour_order)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "ordered colour needs data_order = ascending, descending, or chronological" in failing.stdout
+
+    incomplete_spatial_record = {
+        **BASE,
+        "spatial_narrative": {"applicable": True, "evidence_relation": "not applicable", "preserved_by": "not applicable", "lost_dimension": "not applicable", "alternative_view": "not applicable"},
+    }
+    failing = run(incomplete_spatial_record)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "spatial narrative needs spatial_narrative.evidence_relation" in failing.stdout
+
+    fake_scale_break = {
+        **BASE,
+        "scales": {
+            **BASE["scales"],
+            "discontinuity": {
+                "used": True,
+                "axis": "y",
+                "omitted_range": ["not applicable", "not applicable"],
+                "visible_marker": "none",
+                "label": "none",
+                "alternative_considered": "none",
+            },
+        },
+    }
+    failing = run(fake_scale_break)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "scale discontinuity needs visible_marker = axis-gap or zigzag" in failing.stdout
+
+    ungrounded_ratio = {
+        **BASE,
+        "mark_economy": {
+            **BASE["mark_economy"],
+            "data_ink": {
+                "ratio": 0.999,
+                "method": "trust me",
+                "basis": "trust me",
+                "data_measure": None,
+                "total_measure": None,
+                "data_geometry": "marks",
+                "non_data_geometry": "guides",
+            },
+        },
+    }
+    failing = run(ungrounded_ratio)
+    assert failing.returncode == 1, failing.stdout + failing.stderr
+    assert "a measured data-ink ratio needs a declared measurement method" in failing.stdout
 
     unexplained_dual_scale = {
         **BASE,

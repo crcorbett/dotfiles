@@ -19,6 +19,8 @@ REQUIRED = (
     "form_choice",
     "hierarchy",
     "competence",
+    "mark_economy",
+    "spatial_narrative",
     "provenance",
 )
 
@@ -30,6 +32,13 @@ def get(mapping: dict[str, Any], path: str) -> Any:
             return None
         value = value.get(part)
     return value
+
+
+def meaningful(value: Any) -> bool:
+    """Reject empty and placeholder prose where a concrete record is required."""
+    if not isinstance(value, str) or not value.strip():
+        return False
+    return value.strip().lower() not in {"none", "n/a", "na", "not applicable", "any", "whatever", "trust me"}
 
 
 def main() -> int:
@@ -74,6 +83,37 @@ def main() -> int:
     elif not get(spec, "integrity.effect_ratio_note"):
         warnings.append("no visual-effect ratio or applicability note recorded")
 
+    erasability = get(spec, "mark_economy.erasability")
+    if not isinstance(erasability, list) or not erasability:
+        errors.append("mark_economy.erasability needs one structured entry per non-data layer")
+    elif any(
+        not isinstance(layer, dict)
+        or not meaningful(layer.get("layer"))
+        or layer.get("role") not in {"guide", "annotation", "access", "container", "reference", "provenance", "uncertainty"}
+        or not meaningful(layer.get("reading_lost"))
+        for layer in erasability
+    ):
+        errors.append("each mark_economy.erasability entry needs layer, role, and reading_lost")
+    data_ink_ratio = get(spec, "mark_economy.data_ink.ratio")
+    if data_ink_ratio is not None:
+        if not isinstance(data_ink_ratio, (int, float)) or isinstance(data_ink_ratio, bool):
+            errors.append("mark_economy.data_ink.ratio must be a number from 0 to 1 or null")
+        elif not 0 <= data_ink_ratio <= 1:
+            errors.append("mark_economy.data_ink.ratio must be between 0 and 1")
+        if get(spec, "mark_economy.data_ink.method") not in {"manual-vector-measurement", "estimated-pixel-area"}:
+            errors.append("a measured data-ink ratio needs a declared measurement method")
+        data_measure = get(spec, "mark_economy.data_ink.data_measure")
+        total_measure = get(spec, "mark_economy.data_ink.total_measure")
+        if not isinstance(data_measure, (int, float)) or isinstance(data_measure, bool) or not isinstance(total_measure, (int, float)) or isinstance(total_measure, bool) or total_measure <= 0:
+            errors.append("a measured data-ink ratio needs numeric positive data_measure and total_measure")
+        elif abs(data_ink_ratio - data_measure / total_measure) > 0.01:
+            errors.append("data-ink ratio must agree with data_measure / total_measure within 0.01")
+    elif get(spec, "mark_economy.data_ink.method") != "not-applicable":
+        errors.append("an unmeasured data-ink ratio must set method = not-applicable")
+    for field in ("basis", "data_geometry", "non_data_geometry"):
+        if not meaningful(get(spec, f"mark_economy.data_ink.{field}")):
+            errors.append(f"record mark_economy.data_ink.{field}")
+
     eyespan = get(spec, "comparison.eyespan")
     alternative_view = get(spec, "comparison.alternative_view")
     if eyespan is not True and not alternative_view:
@@ -101,6 +141,22 @@ def main() -> int:
         if not get(spec, "form_choice.dual_scale.alternative_considered"):
             errors.append("dual scale needs an aligned-panel or index alternative")
 
+    discontinuity_used = get(spec, "scales.discontinuity.used")
+    if discontinuity_used not in {True, False}:
+        errors.append("record scales.discontinuity.used as true or false")
+    elif discontinuity_used:
+        if get(spec, "scales.discontinuity.axis") not in {"x", "y", "both"}:
+            errors.append("scale discontinuity needs scales.discontinuity.axis = x, y, or both")
+        omitted_range = get(spec, "scales.discontinuity.omitted_range")
+        if not isinstance(omitted_range, list) or len(omitted_range) != 2 or any(not isinstance(value, (int, float, str)) or (isinstance(value, str) and not meaningful(value)) for value in omitted_range):
+            errors.append("scale discontinuity needs a two-value scales.discontinuity.omitted_range")
+        if get(spec, "scales.discontinuity.visible_marker") not in {"axis-gap", "zigzag"}:
+            errors.append("scale discontinuity needs visible_marker = axis-gap or zigzag")
+        if not meaningful(get(spec, "scales.discontinuity.label")):
+            errors.append("scale discontinuity needs a non-placeholder label")
+        if not meaningful(get(spec, "scales.discontinuity.alternative_considered")):
+            errors.append("scale discontinuity needs a non-placeholder alternative_considered")
+
     for field in ("primary_evidence", "neutral_context", "accent_focus"):
         if not get(spec, f"hierarchy.{field}"):
             errors.append(f"record hierarchy.{field}")
@@ -118,6 +174,32 @@ def main() -> int:
             errors.append("colour encoding needs a necessity statement; prefer neutral non-focus marks")
         if not get(spec, "encoding.colour.semantic_rationale"):
             errors.append("colour encoding needs a semantic rationale; avoid false status signals")
+        ordering = get(spec, "encoding.colour.ordering")
+        kind = get(spec, "encoding.colour.ordering.kind")
+        if not isinstance(ordering, dict) or kind not in {"none", "nominal", "ordered", "sequential"}:
+            errors.append("colour ordering needs kind = none, nominal, ordered, or sequential")
+        elif kind in {"ordered", "sequential"}:
+            if get(spec, "encoding.colour.ordering.data_order") not in {"ascending", "descending", "chronological"}:
+                errors.append("ordered colour needs data_order = ascending, descending, or chronological")
+            domain = get(spec, "encoding.colour.ordering.domain")
+            palette = get(spec, "encoding.colour.ordering.palette")
+            if not isinstance(domain, list) or len(domain) < 2:
+                errors.append("ordered colour needs a domain with at least two values")
+            if not isinstance(palette, list) or len(palette) < 2 or any(not isinstance(value, str) or not value.startswith("#") for value in palette):
+                errors.append("ordered colour needs a hex palette with at least two values")
+            if get(spec, "encoding.colour.ordering.visual_progression") not in {"light-to-dark", "dark-to-light", "low-to-high", "high-to-low"}:
+                errors.append("ordered colour needs a declared visual_progression")
+        elif kind == "nominal" and not meaningful(get(spec, "encoding.colour.ordering.data_order")):
+            errors.append("nominal colour needs an explicit data_order statement")
+        elif kind == "none" and not get(spec, "encoding.colour.ordering.data_order"):
+            errors.append("colour ordering kind none still needs an explicit data_order statement")
+    spatial = get(spec, "spatial_narrative")
+    if get(spec, "spatial_narrative.applicable") not in {True, False}:
+        errors.append("record spatial_narrative.applicable as true or false")
+    elif spatial and spatial.get("applicable"):
+        for field in ("evidence_relation", "preserved_by", "lost_dimension", "alternative_view"):
+            if not meaningful(get(spec, f"spatial_narrative.{field}")):
+                errors.append(f"spatial narrative needs spatial_narrative.{field}")
     if not get(spec, "data.denominator"):
         warnings.append("no denominator recorded; state why it is not applicable")
     if not spec.get("uncertainty"):
@@ -146,7 +228,7 @@ def main() -> int:
     if errors:
         print(f"FAIL: {len(errors)} error(s), {len(warnings)} warning(s)")
         return 1
-    print(f"PASS: {len(warnings)} warning(s)")
+    print(f"PASS: specification preflight; {len(warnings)} warning(s). Rendered visual review remains required.")
     return 0
 
 
