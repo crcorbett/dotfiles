@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Visualisation"
+  short_description: "Evidence-first grammar-of-graphics charts"
+  default_prompt: "Use $data-visualisation to design, implement, and evaluate a truthful data visualisation."

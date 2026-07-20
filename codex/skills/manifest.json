@@ -4,8 +4,13 @@
   "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
   "sourcePath": "codex/skills",
   "installedProjection": "~/.codex/skills",
-  "projectionDigest": "aad25f0658661af6bb98f7a4b6dbef06ffd3bff2a9f00fc942da697e7031a9e8",
+  "projectionDigest": "963b54530b932be69753319124601c4b501dd5aa5170c79785d3b8f299001c07",
   "skills": [
+    {
+      "name": "data-visualisation",
+      "fileCount": 17,
+      "treeDigest": "e439e10fc639a02bf79a1a5b097a85b7e9cd51ca16d47bfee7bedc649a351e0b"
+    },
     {
       "name": "docs-maintainer",
       "fileCount": 5,
@@ -40,6 +45,11 @@
       "name": "repo-structure",
       "fileCount": 100,
       "treeDigest": "2e42dfae793124159b81dbe1233d116031ed57113c90a7208ee8b57e4a6375fa"
+    },
+    {
+      "name": "voice",
+      "fileCount": 12,
+      "treeDigest": "203edafcc87daf6ca17fa660882ad24d6f9cf0de718faeeac152064e344afa04"
     }
   ]
 }

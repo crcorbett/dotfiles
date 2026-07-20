@@ -1,0 +1,83 @@
+{
+  "question": "What single analytical question does this visual answer?",
+  "display_role": "description, exploration, lookup, explanation, or monitoring",
+  "data": {
+    "grain": "One row per ...",
+    "population": "...",
+    "coverage": "...",
+    "denominator": "... or not applicable",
+    "transformations": ["..."],
+    "missingness": "..."
+  },
+  "mark": "line",
+  "encoding": {
+    "x": { "field": "...", "type": "temporal or ordinal", "unit": "..." },
+    "y": { "field": "...", "type": "quantitative", "unit": "..." },
+    "colour": {
+      "field": "... or omit when colour is unnecessary",
+      "purpose": "label, measure, represent, or highlight",
+      "necessity": "What would a reader lose without colour, beyond an already available direct label, position, or line weight?",
+      "semantic_rationale": "Why this hue does not falsely imply a status such as danger, gain, loss, or category membership.",
+      "neutral_default": "Which non-focus marks remain neutral?",
+      "accent_focus": "Which question-relevant reference, exception, or selected series earns accent colour?"
+    }
+  },
+  "scales": {
+    "y": { "baseline": 0, "domain_rationale": "..." }
+  },
+  "form_choice": {
+    "task_function": "comparison, trend over time, distribution, correlation, part-to-whole, geolocation, concept visualisation, or another stated task",
+    "candidate_catalogue": "Data Viz Project taxonomy, direct domain practice, or both",
+    "candidate_forms": [
+      { "form": "ordered dot plot", "fit": "High: supports the named common-scale ranking comparison." },
+      { "form": "table-graphic", "fit": "Considered for exact lookup; loses if the primary task is rapid rank comparison." }
+    ],
+    "chosen_form": "Why this is a chart, table, table-graphic, small-multiple set, or text display.",
+    "alternatives_considered": ["The closest viable alternative and why it loses."],
+    "dual_scale": {
+      "used": false,
+      "rationale": "not applicable",
+      "zero_alignment": "not applicable",
+      "alternative_considered": "aligned panels or indexing"
+    }
+  },
+  "integrity": {
+    "design_invariance": "Which design choices remain constant across observations, and any justified exception.",
+    "visual_effect_ratio": null,
+    "effect_ratio_note": "Use a measured ratio when a graphical effect can be compared directly with the data effect; otherwise explain why it is not applicable."
+  },
+  "comparison": {
+    "eyespan": true,
+    "alternative_view": "Overview/detail, table, or none needed."
+  },
+  "hierarchy": {
+    "primary_evidence": "The marks that answer the question.",
+    "neutral_context": "Secondary data, guides, forecasts, or timeline context.",
+    "accent_focus": "The question-relevant reference, exception, or selected series; or 'none'."
+  },
+  "facet": "... or none",
+  "annotations": "Finding, event, and material qualification.",
+  "uncertainty": "Interval, distribution, sensitivity, or explicit limitation.",
+  "provenance": "Source, data version/query, and access date where relevant.",
+  "accessibility": {
+    "not_colour_only": true,
+    "intended_size": "...",
+    "grayscale_checked": false,
+    "reduced_size_checked": false,
+    "narrow_layout": "not applicable, or describe the responsive alternative"
+  },
+  "competence": {
+    "substantive": "Why the measure and decision matter in its domain.",
+    "statistical": "Why the data, transformations, and uncertainty support the descriptive claim.",
+    "visual": "Why this form, hierarchy, and encoding reveal the evidence."
+  },
+  "review": {
+    "builder": "Name or role of the maker.",
+    "independent_reviewer": "Name or role of a reviewer who did not build the graphic.",
+    "findings": "Concrete rendered-output findings, including any remaining limitation.",
+    "release_decision": "pass or revise"
+  },
+  "exception_record": "none, or rule departure, competing evidence, rejected alternative, and justification",
+  "causal_claim": false,
+  "causal_design": "not applicable"
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Voice"
+  short_description: "Write clear, exact, vivid prose"
+  default_prompt: "Use $voice to rewrite this paragraph so it is clear, exact, concrete, and alive."
