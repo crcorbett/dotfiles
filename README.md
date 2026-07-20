@@ -208,6 +208,39 @@ From any Tailscale device:
 tailscale up --exit-node=<exit-node-ip>
 ```
 
+## Node.js (NVM)
+
+Node.js is managed via [NVM](https://github.com/nvm-sh/nvm) (already configured in zshrc).
+
+### First-time Setup
+
+```bash
+# Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+# Reload shell or source NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Install Node LTS
+nvm install --lts
+nvm alias default node
+
+# Create system symlink (required for tools like turbo that use /usr/bin/env node)
+sudo ln -s "$HOME/.nvm/versions/node/$(node -v)/bin/node" /usr/local/bin/node
+```
+
+### Why the Symlink?
+
+Some tools (e.g., `turbo` installed via bun) use `#!/usr/bin/env node` shebangs. NVM's node is only available in interactive shells, so `/usr/bin/env node` fails in non-interactive contexts. The symlink makes node available system-wide.
+
+**Note**: After upgrading node versions via NVM, update the symlink:
+
+```bash
+sudo rm /usr/local/bin/node
+sudo ln -s "$HOME/.nvm/versions/node/$(node -v)/bin/node" /usr/local/bin/node
+```
+
 ## Mosh (Mobile Shell)
 
 For high-latency connections (e.g., UK → Australia), use mosh instead of SSH:

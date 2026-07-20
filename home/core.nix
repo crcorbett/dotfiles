@@ -48,12 +48,12 @@
   ];
 
   # =============================================================================
-  # Dotfiles
+  # Dotfiles (symlinked to nix store - read-only)
   # =============================================================================
   home.file = {
     ".zshrc.local".source = ./dotfiles/zshrc;
     ".p10k.zsh".source = ./dotfiles/p10k.zsh;
-    ".gitconfig".source = ./dotfiles/gitconfig;
+    # Note: .gitconfig is copied (not symlinked) so gh auth can write to it
     ".gitconfig-macos".source = ./dotfiles/gitconfig-macos;
     ".gitconfig-linux".source = ./dotfiles/gitconfig-linux;
     ".ssh/config".source = ./dotfiles/ssh_config;
@@ -91,6 +91,7 @@
   home.sessionPath = [
     "$HOME/.local/bin"
     "$HOME/.opencode/bin"
+    "$HOME/.bun/bin"
   ];
 
   # =============================================================================
@@ -176,9 +177,18 @@
   };
 
   # =============================================================================
-  # AI Coding CLIs (installed outside Nix for auto-updates)
+  # Writable Config Files (copied, not symlinked, so tools can modify them)
   # =============================================================================
   home.activation = {
+    copyGitconfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      # Copy gitconfig so gh auth setup-git can write to it
+      $DRY_RUN_CMD cp -f ${./dotfiles/gitconfig} $HOME/.gitconfig
+      $DRY_RUN_CMD chmod 644 $HOME/.gitconfig
+    '';
+
+    # =========================================================================
+    # AI Coding CLIs (installed outside Nix for auto-updates)
+    # =========================================================================
     installAiClis = lib.hm.dag.entryAfter ["writeBoundary"] ''
       # Ensure nix-provided tools are in PATH for install scripts
       export PATH="${pkgs.curl}/bin:${pkgs.wget}/bin:${pkgs.coreutils}/bin:$PATH"
@@ -193,6 +203,20 @@
       if [ ! -x "$HOME/.opencode/bin/opencode" ]; then
         echo "Installing OpenCode..."
         $DRY_RUN_CMD ${pkgs.curl}/bin/curl -fsSL https://opencode.ai/install | $DRY_RUN_CMD bash
+      fi
+
+      # Bun (JavaScript runtime & package manager)
+      if [ ! -x "$HOME/.bun/bin/bun" ]; then
+        echo "Installing Bun..."
+        $DRY_RUN_CMD ${pkgs.curl}/bin/curl -fsSL https://bun.sh/install | $DRY_RUN_CMD bash
+      fi
+
+      # Turborepo (installed via bun)
+      if [ -x "$HOME/.bun/bin/bun" ]; then
+        if ! "$HOME/.bun/bin/bun" pm ls -g 2>/dev/null | grep -q "turbo@"; then
+          echo "Installing Turborepo..."
+          $DRY_RUN_CMD "$HOME/.bun/bin/bun" add -g turbo
+        fi
       fi
 
       # Codex (OpenAI) - requires npm
