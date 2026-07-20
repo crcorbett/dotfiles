@@ -58,7 +58,11 @@ def load_manifest() -> dict[str, Any]:
     }
     if set(data) - (required | {"$schema"}) or not required <= set(data):
         raise ProjectionError("manifest keys do not match the projection contract")
-    if data["schemaVersion"] != 1 or data["sourcePath"] != "codex/skills":
+    if (
+        data["schemaVersion"] != 1
+        or data["sourcePath"] != "codex/skills"
+        or data["installedProjection"] != "~/.agents/skills"
+    ):
         raise ProjectionError("unsupported skill manifest")
     names = [item["name"] for item in data["skills"]]
     if names != sorted(names) or len(names) != len(set(names)):
@@ -135,7 +139,7 @@ def copy_validated_source(manifest: dict[str, Any], staging: Path) -> None:
 
 def install(manifest: dict[str, Any], target: Path) -> dict[str, Any]:
     target.mkdir(parents=True, exist_ok=True)
-    backup_root = target.parent / "codex-skill-projection-backups"
+    backup_root = target.parent / "agent-skill-projection-backups"
     backup = backup_root / backup_id(manifest)
     if backup.exists():
         raise ProjectionError(f"backup already exists: {backup}")
@@ -188,7 +192,7 @@ def install(manifest: dict[str, Any], target: Path) -> dict[str, Any]:
 
 
 def rollback(manifest: dict[str, Any], target: Path, requested: str) -> dict[str, Any]:
-    backup_root = (target.parent / "codex-skill-projection-backups").resolve()
+    backup_root = (target.parent / "agent-skill-projection-backups").resolve()
     backup = (backup_root / requested).resolve()
     if backup.parent != backup_root or not backup.is_dir():
         raise ProjectionError(f"rollback backup is not an exact backup id under {backup_root}")
@@ -244,7 +248,7 @@ def parse_args() -> argparse.Namespace:
     action.add_argument("--check", action="store_true")
     action.add_argument("--install", action="store_true")
     action.add_argument("--rollback", metavar="BACKUP_ID")
-    parser.add_argument("--target-root", type=Path, default=Path.home() / ".codex" / "skills")
+    parser.add_argument("--target-root", type=Path, default=Path.home() / ".agents" / "skills")
     return parser.parse_args()
 
 

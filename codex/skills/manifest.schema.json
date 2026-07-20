@@ -9,7 +9,7 @@
     "schemaVersion": { "const": 1 },
     "sourceRepository": { "type": "string", "format": "uri" },
     "sourcePath": { "const": "codex/skills" },
-    "installedProjection": { "const": "~/.codex/skills" },
+    "installedProjection": { "const": "~/.agents/skills" },
     "projectionDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "skills": {
       "type": "array",

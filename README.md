@@ -111,10 +111,10 @@ dotenv/
 
 ## What's Included
 
-### Shared Codex skills
+### Shared agent skills
 
 `codex/skills/` is the version-controlled semantic source for the shared
-engineering skills listed in its manifest. `~/.codex/skills` is an installed
+engineering skills listed in its manifest. `~/.agents/skills` is an installed
 projection, not an editing surface. The projection command validates source
 digests, stages copies, preserves a last-known-good backup, replaces only the
 manifest-named skills, and reads the result back:
