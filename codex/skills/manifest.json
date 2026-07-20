@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
   "sourcePath": "codex/skills",
-  "installedProjection": "~/.codex/skills",
+  "installedProjection": "~/.agents/skills",
   "projectionDigest": "963b54530b932be69753319124601c4b501dd5aa5170c79785d3b8f299001c07",
   "skills": [
     {
