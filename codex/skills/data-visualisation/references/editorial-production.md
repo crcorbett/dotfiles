@@ -26,9 +26,16 @@ Name the reader, decision, publication surface, and one coherent story. Do not d
 - Design a narrow variant deliberately. Preserve the question, evidence, measure, source, and qualification; reduce tick density or rewrite text before hiding data.
 - A long explanatory graphic may have a clear beginning, evidence-bearing middle, and conclusion/next step, but it must not turn data into decoration.
 
+## Sequence, discontinuity, and space
+
+- Use a sequential colour progression only when it represents a real ordering. Make the visual progression agree with chronological or numeric order; use neutral or nominal treatment when the order is not evidence.
+- Do not hide a scale discontinuity. Prefer an aligned panel, explicit annotation, or a different form. If a broken scale is necessary, show the break on the axis, label the omitted range, and say how it changes the comparison.
+- A spatial narrative must preserve the evidence-bearing relation: route order, connection, relative location, exposure, or local detail. A map is not automatically the right form. Pair or replace it with a time sequence, aligned comparison, or table when that gives the reader a truer comparison.
+
 ## Production checks
 
 - Inspect full, embedded, reduced, grayscale, and narrow views.
 - Run a reduced-attention hierarchy check: primary evidence must remain dominant when fine text is no longer readable.
 - Remove non-helpful material, but retain context that protects an honest reading.
+- Apply an erasability test to every non-data layer. Keep only layers whose removal loses orientation, comparison, explanation, access, provenance, or uncertainty; do not treat a data-ink ratio as a universal target.
 - If a visual becomes vague, overcomplicated, or unable to answer its communication task, change form or stop; more ornament will not repair it.

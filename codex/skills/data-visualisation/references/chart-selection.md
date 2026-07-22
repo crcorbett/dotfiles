@@ -5,11 +5,11 @@ Use this self-contained taxonomy to generate candidates before choosing a form. 
 | Data task | Start with these candidates | Decide with this test |
 | --- | --- | --- |
 | Comparison | Ordered dot plot, horizontal bar, table-graphic, slope/dumbbell for two fixed times | Can required values share a position scale? Is exact lookup material? |
-| Trend over time | Line, dot/line, small multiples, indexed aligned panels | Are intervals regular and are events/context visible? Would area imply a cumulative story the data do not support? |
+| Trend over time | Line, dot/line, small multiples, indexed aligned panels | Are intervals regular and are events/context visible? Does ordered colour match an evidence-bearing sequence? Would area imply a cumulative story the data do not support? |
 | Distribution | Raw/jittered points, histogram, ECDF, interval table-graphic | Does the form preserve shape, sample size, outliers, and uncertainty needed for the decision? |
 | Relationship | Scatter, hexbin/density, small multiples, table for sparse lookup | Are measures comparable and is the claim descriptive unless causal design exists? |
 | Part-to-whole | Sorted bar, 100% bar, stacked bar, table | Are there few immediately comparable parts and a clearly defined whole? Pie/doughnut is exceptional. |
-| Geolocation | Point/rate map, grid/hexbin, small multiples, table | Is geography evidence, and are counts adjusted for exposure/population where needed? |
+| Geolocation | Point/rate map, grid/hexbin, linked time sequence, small multiples, table | Is geography evidence, are counts adjusted for exposure/population where needed, and does the display preserve the spatial relation the reader needs? |
 | Flow/process | Sankey/alluvial, connected matrix/table, small multiples | Do flow paths and conservation matter more than exact comparison? Can quantities and crossings be inspected? |
 | Concept/hierarchy | Table, diagram, nested structure only when containment is the question | Is this quantitative evidence, or would text/table be clearer? |
 

@@ -30,19 +30,21 @@
 20. Default non-focus marks to neutral. More than four non-neutral categories needs documented necessity; otherwise use focus/context, direct labels, small multiples, indexing, or a table.
 21. In dense scatters, make context points quiet and directly identify salient observations. Label a trend only with its method and appropriate uncertainty.
 22. Write on the graphic: direct labels, finding, definitions, event, source, and qualification sit with evidence.
-23. Remove redundant non-data ink while retaining reference structures, uncertainty, contextual labels, and useful redundancy.
+23. Perform an erasability test for every non-data layer: remove it mentally and retain it only if an orientation, comparison, explanation, access, provenance, or uncertainty reading fails. Record a data-ink ratio when geometry makes data and non-data ink separable; otherwise record why a ratio would be false precision. Do not optimise an arbitrary ratio at the expense of useful context.
 24. Do not use fake perspective, 3D volume, moire, ornamental texture, heavy grids, hatching, or visual puzzles to make a thin story appear substantial.
 25. Use a grid only for lookup/interpolation and keep it quieter than data. A data-built reference or range may earn stronger treatment.
 
 ## 4. Scale, craft, delivery
 
-26. Treat dual scales as an exception. Do not mix measures to force correlation; align zero when relevant, associate labels directly with series, and use aligned panels or indexing if those conditions fail.
+26. Treat dual scales as an exception. Do not mix measures to force correlation; align zero when relevant, associate labels directly with series, and use aligned panels or indexing if those conditions fail. Treat a broken scale as an exception too: prefer an aligned view, annotation, or separate panel; if a break is necessary, visibly mark the discontinuity, name the omitted range, and record the comparison it changes.
 27. Make the graphic friendly: spell out terms, avoid opaque legends and unnecessary abbreviations, and use direct labels where feasible.
 28. Treat clipping, collision, off-canvas content, and visual vibration as release failures. Inspect full, embedded, reduced, grayscale, and narrow views.
 29. Use differentiated line weights according to semantic weight. Let the data suggest aspect ratio; otherwise favour a horizontal canvas.
 30. Style forecasts, estimates, secondary information, and non-data timeline context neutrally. Reserve colour or strong annotation for central evidence.
+31. When colour encodes an ordered or temporal sequence, make the visual progression match the data order and explain the mapping. When order does not carry meaning, do not imply it through a sequential palette.
+32. In a route, geographic, or space-time narrative, preserve the relationship that makes space evidence: sequence, connection, relative location, or exposure. Do not substitute a decorative map for a comparison; state the lost spatial dimension and offer an aligned time, table, or local-detail alternative when needed.
 
 ## 5. Exception and release
 
-31. Treat rules as diagnostics, not automatic recipes. A valid exception records competing evidence, rejected alternative, and why it improves truth and clarity.
-32. Do not release when evidence, statistical validity, visual integrity, form choice, colour semantics, scale relationship, accessibility, provenance, or independent review is unverified.
+33. Treat rules as diagnostics, not automatic recipes. A valid exception records competing evidence, rejected alternative, and why it improves truth and clarity.
+34. Do not release when evidence, statistical validity, visual integrity, form choice, colour semantics, scale relationship, accessibility, provenance, or independent review is unverified.

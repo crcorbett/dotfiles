@@ -79,3 +79,23 @@
 **Why it passes:** The comparison does not rely on a forced correlation; scale relationship remains inspectable.
 
 **Failing version:** Two unrelated axes stretched until their lines appear to move together, with a title implying one series drove the other.
+
+## 9. Route narrative that retains place and sequence
+
+**Question:** Where in a morning delivery route do late handoffs accumulate, and does their order suggest a recurring bottleneck?
+
+**Grammar:** stop-time-delay rows -> order by scheduled stop and calculate exposure-adjusted late rate -> connected route with directly labelled stop sequence + aligned delay-by-stop strip -> geographic coordinate and ordered stop index -> direct labels for salient stops, route coverage, and reporting limitation.
+
+**Why it passes:** The route connection and sequence are both evidence, while the aligned strip gives an exact common-scale comparison. A reader can recover location, order, and local delay without guessing from colour.
+
+**Failing version:** Pins in different colours on a base map. The reader cannot tell route order, compare delays, or distinguish a real bottleneck from differing stop volume.
+
+## 10. Honest handling of an extreme value
+
+**Question:** How do branch approval rates compare when one branch is far above the rest?
+
+**Grammar:** branch-rate rows -> retain common percentage scale or use a main comparison plus clearly labelled detail panel -> ordered dots with direct values -> explicit domain and any range omission -> neutral branches plus one question-relevant accent.
+
+**Why it passes:** It does not use an invisible broken axis to amplify small differences. If an exceptional-value detail is needed, the reader sees the scale change and the original common-scale comparison remains available.
+
+**Failing version:** A broken y-axis without a discontinuity marker or omitted-range label. It creates a sharper apparent gap while concealing the scale change.
