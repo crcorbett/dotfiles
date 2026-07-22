@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate, install, or roll back the bounded shared Codex skill projection."""
+"""Validate, install, or roll back bounded projections of shared Codex skills."""
 
 from __future__ import annotations
 
@@ -22,7 +22,9 @@ MANIFEST_PATH = SOURCE_ROOT / "manifest.json"
 
 
 class ProjectionError(RuntimeError):
-    pass
+    def __init__(self, message: str, recovery: str | None = None) -> None:
+        super().__init__(message)
+        self.recovery = recovery
 
 
 def digest_tree(root: Path) -> tuple[int, str]:
@@ -52,16 +54,20 @@ def load_manifest() -> dict[str, Any]:
         "schemaVersion",
         "sourceRepository",
         "sourcePath",
-        "installedProjection",
+        "installedProjections",
         "projectionDigest",
         "skills",
     }
     if set(data) - (required | {"$schema"}) or not required <= set(data):
         raise ProjectionError("manifest keys do not match the projection contract")
     if (
-        data["schemaVersion"] != 1
+        data["schemaVersion"] != 2
         or data["sourcePath"] != "codex/skills"
-        or data["installedProjection"] != "~/.agents/skills"
+        or data["installedProjections"]
+        != [
+            {"id": "agents", "path": "~/.agents/skills", "role": "primary"},
+            {"id": "codex", "path": "~/.codex/skills", "role": "compatibility"},
+        ]
     ):
         raise ProjectionError("unsupported skill manifest")
     names = [item["name"] for item in data["skills"]]
@@ -94,6 +100,31 @@ def validate_target_root(target_root: Path) -> Path:
     return target
 
 
+def selected_projections(manifest: dict[str, Any], target_roots: list[Path]) -> list[dict[str, str | Path]]:
+    """Return manifest targets, or explicit disposable targets for a bounded check."""
+    if target_roots:
+        projections = [
+            {"id": f"override-{index + 1}", "role": "override", "path": str(root), "target": validate_target_root(root)}
+            for index, root in enumerate(target_roots)
+        ]
+    else:
+        projections = [
+            {**projection, "target": validate_target_root(Path(projection["path"]))}
+            for projection in manifest["installedProjections"]
+        ]
+    targets = [projection["target"] for projection in projections]
+    if len(targets) != len(set(targets)):
+        raise ProjectionError("each selected projection must have a distinct target root")
+    return projections
+
+
+def projection_backup_root(target: Path) -> Path:
+    # Keep backup identities scoped to the exact target. Explicit disposable
+    # targets commonly share a parent, so a parent-level backup root can make
+    # two otherwise independent projections collide.
+    return target / ".codex-skill-projection-backups"
+
+
 def source_revision() -> dict[str, Any]:
     revision = subprocess.run(
         ["git", "-C", str(REPOSITORY_ROOT), "rev-parse", "HEAD"],
@@ -102,7 +133,18 @@ def source_revision() -> dict[str, Any]:
         text=True,
     ).stdout.strip()
     dirty = subprocess.run(
-        ["git", "-C", str(REPOSITORY_ROOT), "status", "--porcelain", "--", "codex/skills", "scripts/project-codex-skills.py"],
+        [
+            "git",
+            "-C",
+            str(REPOSITORY_ROOT),
+            "status",
+            "--porcelain",
+            "--",
+            "codex/skills",
+            "scripts/project-codex-skills.py",
+            "README.md",
+            "scripts/test-project-codex-skills.py",
+        ],
         check=True,
         capture_output=True,
         text=True,
@@ -137,10 +179,10 @@ def copy_validated_source(manifest: dict[str, Any], staging: Path) -> None:
             raise ProjectionError(f"staged projection failed validation for {item['name']}")
 
 
-def install(manifest: dict[str, Any], target: Path) -> dict[str, Any]:
+def install(manifest: dict[str, Any], target: Path, identifier: str) -> dict[str, Any]:
     target.mkdir(parents=True, exist_ok=True)
-    backup_root = target.parent / "agent-skill-projection-backups"
-    backup = backup_root / backup_id(manifest)
+    backup_root = projection_backup_root(target)
+    backup = backup_root / identifier
     if backup.exists():
         raise ProjectionError(f"backup already exists: {backup}")
     backup.mkdir(parents=True)
@@ -158,9 +200,11 @@ def install(manifest: dict[str, Any], target: Path) -> dict[str, Any]:
                     raise ProjectionError(f"installed skill may not be a symlink: {current}")
                 if current.exists():
                     count, digest = digest_tree(current)
-                    previous_projection.append({"skill": name, "fileCount": count, "treeDigest": digest})
+                    previous_projection.append({"skill": name, "state": "present", "fileCount": count, "treeDigest": digest})
                     os.replace(current, backup / name)
                     moved.append(name)
+                else:
+                    previous_projection.append({"skill": name, "state": "absent"})
                 os.replace(staging / name, current)
                 installed.append(name)
         except Exception:
@@ -191,8 +235,8 @@ def install(manifest: dict[str, Any], target: Path) -> dict[str, Any]:
     return receipt
 
 
-def rollback(manifest: dict[str, Any], target: Path, requested: str) -> dict[str, Any]:
-    backup_root = (target.parent / "agent-skill-projection-backups").resolve()
+def rollback_inputs(manifest: dict[str, Any], target: Path, requested: str) -> tuple[Path, dict[str, dict[str, Any]], list[str]]:
+    backup_root = projection_backup_root(target).resolve()
     backup = (backup_root / requested).resolve()
     if backup.parent != backup_root or not backup.is_dir():
         raise ProjectionError(f"rollback backup is not an exact backup id under {backup_root}")
@@ -201,26 +245,38 @@ def rollback(manifest: dict[str, Any], target: Path, requested: str) -> dict[str
         raise ProjectionError(f"rollback backup has no installation receipt: {receipt_path}")
     receipt = json.loads(receipt_path.read_text())
     prior = {item["skill"]: item for item in receipt.get("previousProjection", [])}
-    available = [item["name"] for item in manifest["skills"] if (backup / item["name"]).is_dir()]
-    if not available:
-        raise ProjectionError(f"backup contains none of the manifest skills: {backup}")
-    for name in available:
-        if name not in prior:
-            raise ProjectionError(f"rollback receipt has no digest for {name}")
+    names = [item["name"] for item in manifest["skills"]]
+    if set(prior) != set(names):
+        raise ProjectionError("rollback receipt does not describe every manifest skill")
+    for name in names:
+        prior_entry = prior[name]
+        if prior_entry.get("state") == "absent":
+            if (backup / name).exists():
+                raise ProjectionError(f"rollback backup unexpectedly contains absent skill: {name}")
+            continue
+        if prior_entry.get("state") != "present":
+            raise ProjectionError(f"rollback receipt has invalid prior state for {name}")
         count, digest = digest_tree(backup / name)
-        if (count, digest) != (prior[name]["fileCount"], prior[name]["treeDigest"]):
+        if (count, digest) != (prior_entry.get("fileCount"), prior_entry.get("treeDigest")):
             raise ProjectionError(f"rollback backup digest mismatch for {name}")
+    return backup, prior, names
+
+
+def rollback(manifest: dict[str, Any], target: Path, requested: str) -> dict[str, Any]:
+    backup, prior, names = rollback_inputs(manifest, target, requested)
+    backup_root = projection_backup_root(target).resolve()
     quarantine = backup_root / f"pre-rollback-{backup_id(manifest)}"
     quarantine.mkdir(parents=True)
     restored: list[str] = []
     try:
-        for name in available:
+        for name in names:
             current = target / name
             if current.is_symlink():
                 raise ProjectionError(f"installed skill may not be a symlink: {current}")
             if current.exists():
                 os.replace(current, quarantine / name)
-            os.replace(backup / name, current)
+            if prior[name]["state"] == "present":
+                os.replace(backup / name, current)
             restored.append(name)
     except Exception:
         for name in reversed(restored):
@@ -242,13 +298,66 @@ def rollback(manifest: dict[str, Any], target: Path, requested: str) -> dict[str
     }
 
 
+def install_projections(manifest: dict[str, Any], projections: list[dict[str, str | Path]]) -> list[dict[str, Any]]:
+    """Install every selected target or restore completed targets on failure."""
+    identifier = backup_id(manifest)
+    receipts: list[dict[str, Any]] = []
+    try:
+        for projection in projections:
+            target = projection["target"]
+            assert isinstance(target, Path)
+            receipt = install(manifest, target, identifier)
+            receipt["projection"] = {"id": projection["id"], "role": projection["role"]}
+            receipts.append(receipt)
+    except Exception as error:
+        recovered: list[str] = []
+        recovery_failures: list[str] = []
+        for receipt in reversed(receipts):
+            try:
+                rollback(manifest, Path(receipt["target"]), identifier)
+                recovered.append(receipt["target"])
+            except Exception as recovery_error:
+                recovery_failures.append(f"{receipt['target']}: {recovery_error}")
+        detail = (
+            "; ".join(recovery_failures)
+            if recovery_failures
+            else f"restored completed targets: {', '.join(recovered) or 'none'}"
+        )
+        raise ProjectionError(
+            f"multi-projection install failed: {error}; recovery: {detail}",
+            "Inspect the named target receipt and the exact failure before retrying; no source publication was attempted.",
+        ) from error
+    return receipts
+
+
+def rollback_projections(
+    manifest: dict[str, Any], projections: list[dict[str, str | Path]], requested: str
+) -> list[dict[str, Any]]:
+    """Fail before mutation unless every selected target has a valid receipt."""
+    for projection in projections:
+        target = projection["target"]
+        assert isinstance(target, Path)
+        rollback_inputs(manifest, target, requested)
+    return [
+        rollback(manifest, projection["target"], requested)
+        for projection in projections
+    ]
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--check", action="store_true")
     action.add_argument("--install", action="store_true")
     action.add_argument("--rollback", metavar="BACKUP_ID")
-    parser.add_argument("--target-root", type=Path, default=Path.home() / ".agents" / "skills")
+    parser.add_argument(
+        "--target-root",
+        type=Path,
+        action="append",
+        default=[],
+        metavar="TARGET",
+        help="Override manifest targets for a bounded disposable check or install; repeat for multiple targets.",
+    )
     return parser.parse_args()
 
 
@@ -257,28 +366,59 @@ def main() -> int:
     try:
         manifest = load_manifest()
         verify_source(manifest)
-        target = validate_target_root(args.target_root)
+        projections = selected_projections(manifest, args.target_root)
         if args.check:
-            checks = check_projection(manifest, target)
-            passed = all(check["status"] == "passed" for check in checks)
+            checked = [
+                {
+                    "id": projection["id"],
+                    "role": projection["role"],
+                    "target": str(projection["target"]),
+                    "checks": check_projection(manifest, projection["target"]),
+                }
+                for projection in projections
+            ]
+            passed = all(
+                check["status"] == "passed"
+                for projection in checked
+                for check in projection["checks"]
+            )
             result = {
                 "status": "passed" if passed else "failed",
                 "operation": "check",
                 "source": source_revision(),
                 "projectionDigest": manifest["projectionDigest"],
-                "target": str(target),
-                "checks": checks,
-                "postcondition": "Every named installed skill matches the canonical manifest." if passed else "At least one named installed skill differs from the canonical manifest.",
+                "projections": checked,
+                "postcondition": "Every named installed skill in every selected projection matches the canonical manifest." if passed else "At least one named installed skill differs from the canonical manifest.",
                 "recovery": None if passed else "Review the bounded checks, then run --install or restore an identified backup.",
             }
         elif args.install:
-            result = install(manifest, target)
+            receipts = install_projections(manifest, projections)
+            result = {
+                "status": "passed",
+                "operation": "install",
+                "source": source_revision(),
+                "projectionDigest": manifest["projectionDigest"],
+                "projections": receipts,
+                "postcondition": "Every named installed skill in every selected projection matches the canonical manifest after bounded replacement.",
+                "nonclaims": ["Unlisted installed skills were not inspected or changed.", "This receipt does not publish or push the source repository."],
+            }
         else:
-            result = rollback(manifest, target, args.rollback)
+            result = {
+                "status": "passed",
+                "operation": "rollback",
+                "projections": rollback_projections(manifest, projections, args.rollback),
+                "postcondition": "The selected last-known-good projection backup replaced the corresponding named skills in every selected target.",
+                "nonclaims": ["Skills omitted from the manifest were not changed."],
+            }
         print(json.dumps(result, indent=2))
         return 0 if result["status"] == "passed" else 1
     except (OSError, ProjectionError, subprocess.CalledProcessError, json.JSONDecodeError) as error:
-        print(json.dumps({"status": "failed", "error": str(error), "recovery": "Correct the exact reported invariant; no publication or network operation was attempted."}, indent=2))
+        recovery = (
+            error.recovery
+            if isinstance(error, ProjectionError) and error.recovery
+            else "Correct the exact reported invariant; no publication or network operation was attempted."
+        )
+        print(json.dumps({"status": "failed", "error": str(error), "recovery": recovery}, indent=2))
         return 1
 
 

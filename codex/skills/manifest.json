@@ -1,9 +1,20 @@
 {
   "$schema": "./manifest.schema.json",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceRepository": "https://github.com/crcorbett/dotfiles.git",
   "sourcePath": "codex/skills",
-  "installedProjection": "~/.agents/skills",
+  "installedProjections": [
+    {
+      "id": "agents",
+      "path": "~/.agents/skills",
+      "role": "primary"
+    },
+    {
+      "id": "codex",
+      "path": "~/.codex/skills",
+      "role": "compatibility"
+    }
+  ],
   "projectionDigest": "963b54530b932be69753319124601c4b501dd5aa5170c79785d3b8f299001c07",
   "skills": [
     {

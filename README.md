@@ -113,25 +113,40 @@ dotenv/
 
 ### Shared agent skills
 
-`codex/skills/` is the version-controlled semantic source for the shared
-engineering skills listed in its manifest. `~/.agents/skills` is an installed
-projection, not an editing surface. The projection command validates source
-digests, stages copies, preserves a last-known-good backup, replaces only the
-manifest-named skills, and reads the result back:
+`codex/skills/` is the sole version-controlled semantic source for the shared
+engineering skills listed in its manifest. `~/.agents/skills` is the primary
+installed projection and `~/.codex/skills` is a compatibility projection; neither
+is an editing surface. The projector owns only manifest-named skill directories,
+so unrelated installed skills remain untouched. It validates source digests,
+stages copies, preserves a last-known-good backup per target, replaces only
+named skills, and reads both projections back. Backups are stored inside the
+corresponding target as `.codex-skill-projection-backups/`.
 
 ```bash
 python3 scripts/project-codex-skills.py --check
 python3 scripts/project-codex-skills.py --install
 ```
 
-Use the backup ID from an installation receipt to recover:
+Use the backup ID from an installation receipt to recover both default targets:
 
 ```bash
 python3 scripts/project-codex-skills.py --rollback BACKUP_ID
 ```
 
+For a disposable fixture, `--target-root` overrides the manifest targets and can
+be repeated. It does not alter either installed projection:
+
+```bash
+python3 scripts/project-codex-skills.py --check \
+  --target-root /tmp/agents-skills \
+  --target-root /tmp/codex-skills
+```
+
 Commit and review source changes before installation. The script never pushes,
-publishes, or changes skills omitted from the manifest.
+publishes, follows symlinks, or changes skills omitted from the manifest. If a
+default multi-projection install fails after an earlier target succeeds, it
+restores each completed target from its installation receipt before reporting
+the failure; inspect the bounded receipt and recovery message before retrying.
 
 Shared PRD-skill changes also run the bounded contradiction suite before
 projection:

@@ -3,13 +3,33 @@
   "$id": "https://crcorbett.dev/schemas/codex-skill-manifest.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "sourceRepository", "sourcePath", "installedProjection", "projectionDigest", "skills"],
+  "required": ["schemaVersion", "sourceRepository", "sourcePath", "installedProjections", "projectionDigest", "skills"],
   "properties": {
     "$schema": { "type": "string" },
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "sourceRepository": { "type": "string", "format": "uri" },
     "sourcePath": { "const": "codex/skills" },
-    "installedProjection": { "const": "~/.agents/skills" },
+    "installedProjections": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": {
+            "id": "agents",
+            "path": "~/.agents/skills",
+            "role": "primary"
+          }
+        },
+        {
+          "const": {
+            "id": "codex",
+            "path": "~/.codex/skills",
+            "role": "compatibility"
+          }
+        }
+      ],
+      "items": false,
+      "minItems": 2
+    },
     "projectionDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "skills": {
       "type": "array",
