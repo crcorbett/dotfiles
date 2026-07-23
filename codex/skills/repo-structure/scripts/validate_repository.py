@@ -65,6 +65,52 @@ required = [
 missing = [path for path in required if not (root / path).is_file()]
 if missing:
     raise SystemExit(f"missing repository files: {missing}")
+frontend_composition = (
+    root / "docs/architecture/frontend-composition.md"
+).read_text()
+for phrase in (
+    "Routes and feature boundaries own data loading, Effect/service execution",
+    "Presentation leaves receive narrow readonly values and action callbacks",
+):
+    if phrase not in frontend_composition:
+        raise SystemExit(
+            f"frontend composition missing boundary contract: {phrase}"
+        )
+leaf_boundary_contradiction = re.compile(
+    r"\b(?:data-bearing\s+|presentation\s+)?(?:leaf|leaves)\s+"
+    r"(?:should\s+)?own(?:s|ed|ing)?\s+(?:their\s+(?:own\s+)?)?"
+    r"(?:the\s+)?(?:narrow\s+|specific\s+)?"
+    r"(?:quer(?:y|ies)|reads?|data(?:\s+loading)?|fetch(?:ing)?|acquisition|"
+    r"effects?(?:\s+execution)?|services?|rpc|mutations?|commands?|"
+    r"shared\s+(?:state|workflows?))\b",
+    re.IGNORECASE,
+)
+leaf_boundary_execution = re.compile(
+    r"\b(?:presentation\s+|data-bearing\s+)?"
+    r"(?:leaf|leaves|[A-Z][A-Za-z0-9]*Leaf)\b\s+"
+    r"(?:components?\s+)?(?:should\s+)?(?:directly\s+)?"
+    r"(?:calls?|uses?|reads?|fetches?|executes?|runs?|invokes?)\b"
+    r".{0,140}\b(?:use(?:Suspense|Infinite)?Quer(?:y|ies)|useMutation|"
+    r"Route\.use(?:LoaderData|Params|Search)|Effect\.run"
+    r"(?:Sync|Promise|PromiseExit)|services?|rpc|queries|mutations?|"
+    r"commands?|shared\s+atoms?)\b",
+    re.IGNORECASE | re.DOTALL,
+)
+leaf_hook_execution = re.compile(
+    r"\bfunction\s+[A-Z][A-Za-z0-9]*Leaf\s*\([^)]*\)\s*\{"
+    r".{0,220}\b(?:use(?:Suspense|Infinite)?Quer(?:y|ies)|useMutation|"
+    r"Route\.use(?:LoaderData|Params|Search)|Effect\.run"
+    r"(?:Sync|Promise|PromiseExit))\b",
+    re.IGNORECASE | re.DOTALL,
+)
+if (
+    leaf_boundary_contradiction.search(frontend_composition)
+    or leaf_boundary_execution.search(frontend_composition)
+    or leaf_hook_execution.search(frontend_composition)
+):
+    raise SystemExit(
+        "frontend composition assigns data or workflow execution to a presentation leaf"
+    )
 manifest = json.loads((root / "package.json").read_text())
 effect = manifest["workspaces"]["catalogs"]["effect"]
 if len(set(effect.values())) != 1:

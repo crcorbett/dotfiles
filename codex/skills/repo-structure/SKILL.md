@@ -81,8 +81,10 @@ than a dependency on the global installation.
   Effect execution, SSR Exit codecs, and disposal.
 - Browser runtime uses Fetch; server loaders use the in-process HTTP client and
   never loop back to deployment HTTP.
-- Route/feature boundaries own shared orchestration. A leaf owns its narrow
-  read/command/skeleton/fallback; pure presentation leaves receive narrow props.
+- Route/feature boundaries own data loading, Effect/service execution,
+  mutations, commands, shared state, and workflow/error policy. Presentation
+  leaves receive narrow readonly values and action callbacks, then own
+  rendering, accessibility, pure derivation, and genuinely local UI state.
 - Decode unknown values at ingress and encode at outward boundaries only.
 - Keep Effects flat and sequential; reject generic client escape hatches,
   runtime execution in packages, service-aware presentation leaves, boolean

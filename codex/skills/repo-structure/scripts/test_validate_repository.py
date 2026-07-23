@@ -97,6 +97,38 @@ with tempfile.TemporaryDirectory(prefix="repo-structure-cases-") as raw:
     path.write_text(path.read_text().replace("## Runbook applicability", "## Operations"))
     cases["missing-runbook-applicability"] = run_validator(missing_runbook_applicability).returncode != 0
 
+    leaf_owned_boundary_work = temp / "leaf-owned-boundary-work"
+    shutil.copytree(golden, leaf_owned_boundary_work)
+    path = leaf_owned_boundary_work / "docs/architecture/frontend-composition.md"
+    path.write_text(
+        path.read_text().replace(
+            "Routes and feature boundaries own data loading, Effect/service execution,\n"
+            "mutations, commands, shared state, workflow/error policy, and SSR restoration.\n"
+            "Presentation leaves receive narrow readonly values and action callbacks, then\n"
+            "own rendering, accessibility, pure derivation, and genuinely local UI state.",
+            "Routes own cross-feature orchestration and SSR restoration. A leaf owns its\n"
+            "specific query, read, command, skeleton, and fallback."
+        )
+    )
+    cases["leaf-owned-boundary-work"] = run_validator(
+        leaf_owned_boundary_work
+    ).returncode != 0
+
+    leaf_hook_boundary_work = temp / "leaf-hook-boundary-work"
+    shutil.copytree(golden, leaf_hook_boundary_work)
+    path = leaf_hook_boundary_work / "docs/architecture/frontend-composition.md"
+    path.write_text(
+        path.read_text().replace(
+            "Presentation leaves receive narrow readonly values and action callbacks, then\n"
+            "own rendering, accessibility, pure derivation, and genuinely local UI state.",
+            "Presentation leaves directly use useQuery and useMutation because they render\n"
+            "the result."
+        )
+    )
+    cases["leaf-hook-boundary-work"] = run_validator(
+        leaf_hook_boundary_work
+    ).returncode != 0
+
     if not all(cases.values()):
         raise SystemExit(json.dumps({"status":"failed","cases":cases}))
     print(json.dumps({"status":"passed","golden":"validated","adversarial":cases,"nonClaims":["No dependencies were installed and no provider behavior was tested."]}))

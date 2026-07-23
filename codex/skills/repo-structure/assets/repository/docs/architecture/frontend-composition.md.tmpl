@@ -1,7 +1,9 @@
 # Frontend composition
 
-Routes own cross-feature orchestration and SSR restoration. A leaf owns its
-narrow read/command/skeleton/fallback; pure presentation leaves accept narrow
-readonly props. Prefer children/slots and colocated feature components. Reject
-boolean-prop matrices, synchronization Effects, hooks that rename one call, and
-giant route components.
+Routes and feature boundaries own data loading, Effect/service execution,
+mutations, commands, shared state, workflow/error policy, and SSR restoration.
+Presentation leaves receive narrow readonly values and action callbacks, then
+own rendering, accessibility, pure derivation, and genuinely local UI state.
+Prefer children/slots and colocated feature components. Reject service-aware
+leaves, boolean-prop matrices, synchronization Effects, hooks that rename one
+call, and giant route components.

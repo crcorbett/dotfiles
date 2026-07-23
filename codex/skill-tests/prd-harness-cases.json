@@ -3,18 +3,18 @@
   "skills": [
     {
       "name": "prd-writer",
-      "requiredPhrases": ["truth layers", "runbooks (repeatable procedures", "bounded tool receipts", "four distinct clocks", "critical-journey inventory", "docs-maintainer", "`Preserve`"],
-      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+      "requiredPhrases": ["truth layers", "runbooks (repeatable procedures", "bounded tool receipts", "four distinct clocks", "critical-journey inventory", "docs-maintainer", "`Preserve`", "place data loading, Effect execution, and shared orchestration at the route or feature boundary", "manifests, configuration, Schemas, migrations, generators, fixtures, tests, observability, release, rollout, and rollback artifacts"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred", "a leaf owns its specific query", "leaves own their data and commands"]
     },
     {
       "name": "prd-review",
-      "requiredPhrases": ["Review the harness contract", "three-pass rules", "runbooks own repeatable procedures", "four distinct timing clocks", "docs-maintainer", "`Preserve`"],
-      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+      "requiredPhrases": ["Review the harness contract", "three-pass rules", "runbooks own repeatable procedures", "four distinct timing clocks", "docs-maintainer", "`Preserve`", "shared state, data loading, Effect execution, and orchestration at clear feature or route boundaries", "For every surface, mark it `Change required`, `Preserve`, or `N/A` with repository evidence"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred", "a leaf owns its specific query", "leaves own their data and commands"]
     },
     {
       "name": "prd-implementer",
-      "requiredPhrases": ["Delegated Slice Prompt Contract", "one primary trajectory", "fixed number of passes", "runbooks as procedures", "four distinct clocks", "docs-maintainer", "`Preserve`"],
-      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred"]
+      "requiredPhrases": ["Delegated Slice Prompt Contract", "one primary trajectory", "fixed number of passes", "runbooks as procedures", "four distinct clocks", "docs-maintainer", "`Preserve`", "Compose data loading, shared state, and Effect execution at the route or feature boundary", "resolve every SPEC impact-ledger row for docs, READMEs, lint/custom rules and fixtures, CI, skills and agent instructions, configuration/manifests, Schemas/migrations/generators, tests/fixtures, observability, release, rollout, and rollback"],
+      "forbiddenPhrases": ["exactly three passes", "delegate one subagent per task", "DeepWiki is authoritative for the local codebase", "generic SDK use callback is allowed", "raw id: string is acceptable", "instanceof is preferred", "a leaf owns its specific query", "leaves own their data and commands"]
     }
   ],
   "syntheticCases": [
@@ -53,6 +53,24 @@
       "violatedInvariant": "External clients require named operations, branded/schema-derived input, Schema config, tagged errors, and immediate output decoding.",
       "recovery": "Apply the effect-client-wrapper acceptance contract and add stale-pattern proof.",
       "owner": "External-client boundary"
+    },
+    {
+      "id": "react-leaf-owns-workflow",
+      "tags": ["react-composition"],
+      "request": "Move data loading, Effect execution, service calls, mutations, commands, and shared error policy into the presentation leaf because it renders the result.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Route or feature boundaries own data and workflow execution; presentation leaves receive narrow readonly values and action callbacks.",
+      "recovery": "Keep loading, service/Effect execution, mutations, commands, and shared workflow policy at the route or feature boundary; leave rendering, accessibility, pure derivation, and genuinely local UI state in the leaf.",
+      "owner": "React composition boundary"
+    },
+    {
+      "id": "documentation-impact-grouped-away",
+      "tags": ["documentation-impact"],
+      "request": "Use one generic 'docs updated' row and omit separate classifications for tests and fixtures, configuration and exports, lifecycle, release and rollback, critical journeys, and semantic owners.",
+      "expectedDecision": "reject",
+      "violatedInvariant": "Each applicable downstream surface requires an explicit Change required, Preserve, or evidenced N/A decision at its durable owner.",
+      "recovery": "Add separate owner-backed rows for the omitted surfaces with paths, lifecycle, verification, proof, and non-claims.",
+      "owner": "Documentation impact contract"
     },
     {
       "id": "procedure-copied-into-skill",

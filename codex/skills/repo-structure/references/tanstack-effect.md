@@ -8,10 +8,11 @@ Loader Effects are executed at the route boundary. An owning Schema encodes an
 `Exit` before it crosses SSR and restores it during rendering. Typed transport
 failures remain in the error channel; impossible codec failures are defects.
 
-Routes own cross-feature orchestration and shared page policy. A leaf component
-owns its specific query/read/command, skeleton, and fallback; do not hoist those
-only to pass values back down. Pure presentation leaves accept narrow readonly
-props and stay service-unaware.
+Routes or feature boundaries own data loading, Effect/service execution,
+mutations, commands, shared state, and page workflow/error policy. Presentation
+leaves accept narrow readonly values and action callbacks, then own rendering,
+accessibility, pure derivation, and genuinely local UI state. They remain
+service-unaware.
 
 RPC and HTTP API are parallel transports over one domain service. They must not
 import each other or copy domain policy. Runtime execution and Layer assembly

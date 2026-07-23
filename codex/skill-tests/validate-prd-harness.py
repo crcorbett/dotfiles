@@ -11,7 +11,17 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES_PATH = Path(__file__).with_name("prd-harness-cases.json")
-REQUIRED_TAGS = {"ritual", "vague-proof", "helper-sprawl", "effect-client-wrapper", "runbook", "retrieval", "delegation"}
+REQUIRED_TAGS = {
+    "ritual",
+    "vague-proof",
+    "helper-sprawl",
+    "effect-client-wrapper",
+    "react-composition",
+    "documentation-impact",
+    "runbook",
+    "retrieval",
+    "delegation",
+}
 
 
 def fail(invariant: str, target: str, recovery: str) -> int:
